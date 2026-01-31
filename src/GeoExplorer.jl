@@ -1,4 +1,4 @@
-module JuliaPkgTemplate
+module GeoExplorer
 
 # Write your package code here
 

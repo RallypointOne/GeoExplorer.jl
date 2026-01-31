@@ -1,6 +1,6 @@
-using JuliaPkgTemplate
+using GeoExplorer
 using Test
 
-@testset "JuliaPkgTemplate.jl" begin
+@testset "GeoExplorer.jl" begin
     @test true
 end
