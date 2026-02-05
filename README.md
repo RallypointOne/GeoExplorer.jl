@@ -8,6 +8,12 @@
 
 GeoExplorer.jl provides an ArcGIS-like experience for exploring maps and geospatial data, built on [Tyler.jl](https://github.com/MakieOrg/Tyler.jl) and [GLMakie.jl](https://github.com/MakieOrg/Makie.jl).
 
+```julia
+using GeoExplorer, OSMGeocoder
+
+explore(geocode(city="Boulder", state="CO"))
+```
+
 ![Boulder, CO](https://github.com/user-attachments/assets/09b8862d-4ac8-42fd-9b0d-935527608424)
 
 ## Features
@@ -38,7 +44,7 @@ app = explore(extent=Extents.Extent(X=(-0.2, 0.2), Y=(51.4, 51.6)))  # London
 # Use satellite imagery
 app = explore(provider=TileProviders.Esri(:WorldImagery))
 
-# Explore a geometry file
+# Explore a geometry
 using GeoJSON
 geom = GeoJSON.read("my_data.geojson")
 app = explore(geom)
