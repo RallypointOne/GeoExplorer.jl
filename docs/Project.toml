@@ -1,0 +1,5 @@
+[deps]
+GeoExplorer = "386f1b4b-9a3d-4ef9-97c4-2a0480d4a57f"
+GLMakie = "e9467ef8-e4e7-5192-8a1a-b1aee30e663a"
+IJulia = "7073ff75-c697-5162-941a-fcdaad2a7d2a"
+OSMGeocoder = "e1ee3dc8-21cd-4df6-8ace-aab951cb9b4d"

@@ -42,6 +42,13 @@ jobs:
             Pkg.precompile()
           '
 
+      - name: Build IJulia kernel
+        run: |
+          julia --project=docs -e '
+            using IJulia
+            IJulia.installkernel("Julia")
+          '
+
       - name: Setup Quarto
         uses: quarto-dev/quarto-actions/setup@v2
 
