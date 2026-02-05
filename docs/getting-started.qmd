@@ -1,0 +1,155 @@
+---
+title: "Getting Started"
+---
+
+## Installation
+
+GeoExplorer.jl can be installed from the Julia package manager:
+
+```julia
+using Pkg
+Pkg.add("GeoExplorer")
+```
+
+## Basic Usage
+
+### Launching the Explorer
+
+The simplest way to start exploring is to call `explore()`:
+
+```julia
+using GeoExplorer
+
+app = explore()
+```
+
+This opens an interactive map centered on the Continental United States using OpenStreetMap tiles.
+
+### Custom Extent
+
+You can specify a custom initial extent:
+
+```julia
+using GeoExplorer, Extents
+
+# View of London
+app = explore(extent=Extents.Extent(X=(-0.2, 0.2), Y=(51.4, 51.6)))
+
+# View of Tokyo
+app = explore(extent=Extents.Extent(X=(139.5, 140.0), Y=(35.5, 35.9)))
+```
+
+### Tile Providers
+
+GeoExplorer supports multiple tile providers:
+
+```julia
+using GeoExplorer
+import Tyler.TileProviders
+
+# List available providers
+providers = available_providers()
+
+# Use Esri World Imagery (satellite)
+app = explore(provider=TileProviders.Esri(:WorldImagery))
+
+# Use CartoDB Dark Matter
+app = explore(provider=TileProviders.CartoDB(:DarkMatter))
+
+# Use Esri Topographic
+app = explore(provider=TileProviders.Esri(:WorldTopoMap))
+```
+
+## Working with Geometries
+
+### Exploring a Geometry
+
+You can pass any GeoInterface-compatible geometry directly to `explore()`:
+
+```julia
+using GeoExplorer, GeoJSON
+
+# Load a GeoJSON file
+geom = GeoJSON.read("my_data.geojson")
+
+# Explore it - extent is automatically calculated
+app = explore(geom)
+
+# With custom padding around the geometry (default: 10%)
+app = explore(geom, padding=0.2)  # 20% padding
+```
+
+### Adding Geometries to an Existing Map
+
+Use `plot_geometry!` to add geometries to an existing app:
+
+```julia
+using GeoExplorer, GeoJSON
+
+app = explore()
+
+# Load and plot a geometry
+geom = GeoJSON.read("boundaries.geojson")
+plot_geometry!(app, geom)
+
+# Customize appearance
+plot_geometry!(app, geom, color=:green, strokecolor=:darkgreen, strokewidth=3)
+```
+
+### Supported Geometry Types
+
+GeoExplorer supports all standard GeoInterface geometry types:
+
+| Geometry Type | Default Style |
+|--------------|---------------|
+| Point | Red markers |
+| MultiPoint | Red markers |
+| LineString | Blue lines |
+| MultiLineString | Blue lines |
+| Polygon | Semi-transparent blue fill with blue stroke |
+| MultiPolygon | Semi-transparent blue fill with blue stroke |
+| GeometryCollection | Recursive plotting |
+| Feature | Plots contained geometry |
+| FeatureCollection | Plots all features |
+
+## Programmatic Navigation
+
+### Navigate to a Location
+
+```julia
+using GeoExplorer
+
+app = explore()
+
+# Go to a specific lat/lon with zoom level
+goto!(app, -122.4194, 37.7749, zoom=12)  # San Francisco
+
+# Reset to original extent
+reset_view!(app)
+```
+
+### Zoom and Pan
+
+```julia
+# Zoom in (factor < 1)
+zoom!(app, 0.5)
+
+# Zoom out (factor > 1)
+zoom!(app, 2.0)
+
+# Set center (in Web Mercator coordinates)
+set_center!(app, (x, y))
+```
+
+## Using with Geocoding
+
+GeoExplorer works well with geocoding packages:
+
+```julia
+using GeoExplorer, OSMGeocoder
+
+# Geocode a city and explore it
+result = geocode(city="Boulder", state="CO")
+
+app = explore(result)
+```

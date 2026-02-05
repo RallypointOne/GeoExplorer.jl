@@ -1,0 +1,210 @@
+---
+title: "API Reference"
+---
+
+## Main Functions
+
+### `explore`
+
+```julia
+explore(; extent, provider, figure)
+explore(geometry; padding=0.1, kw...)
+```
+
+Launch the GeoExplorer application.
+
+**Keyword Arguments:**
+
+- `extent`: Initial map extent (default: Continental US)
+- `provider`: Tile provider for basemap (default: OpenStreetMap)
+- `figure`: Makie Figure to use (default: creates new 1200x800 figure)
+
+**With Geometry:**
+
+- `geometry`: Any GeoInterface-compatible geometry
+- `padding`: Fractional padding around geometry extent (default: 0.1)
+
+**Returns:** `GeoExplorerApp` instance
+
+**Examples:**
+
+```julia
+# Default view
+app = explore()
+
+# Custom extent
+app = explore(extent=Extents.Extent(X=(-74.1, -73.9), Y=(40.7, 40.8)))
+
+# With tile provider
+app = explore(provider=TileProviders.Esri(:WorldImagery))
+
+# With geometry
+geom = GeoJSON.read("data.geojson")
+app = explore(geom)
+```
+
+---
+
+### `plot_geometry!`
+
+```julia
+plot_geometry!(app::GeoExplorerApp, geometry; kw...)
+```
+
+Plot a GeoInterface-compatible geometry on the map.
+
+**Arguments:**
+
+- `app`: The GeoExplorerApp instance
+- `geometry`: Any GeoInterface-compatible geometry
+
+**Keyword Arguments (vary by geometry type):**
+
+| Geometry | Keywords |
+|----------|----------|
+| Point/MultiPoint | `color=:red`, `markersize=10` |
+| LineString/MultiLineString | `color=:blue`, `linewidth=2` |
+| Polygon/MultiPolygon | `color=(:blue, 0.3)`, `strokecolor=:blue`, `strokewidth=2` |
+
+**Examples:**
+
+```julia
+app = explore()
+
+# Plot with defaults
+plot_geometry!(app, geom)
+
+# Customize appearance
+plot_geometry!(app, polygon, color=(:green, 0.5), strokecolor=:darkgreen)
+plot_geometry!(app, line, color=:red, linewidth=3)
+plot_geometry!(app, points, color=:orange, markersize=15)
+```
+
+---
+
+## Navigation Functions
+
+### `goto!`
+
+```julia
+goto!(app::GeoExplorerApp, lon, lat; zoom=10)
+```
+
+Navigate to a specific longitude/latitude location.
+
+**Arguments:**
+
+- `app`: The GeoExplorerApp instance
+- `lon`: Longitude in degrees
+- `lat`: Latitude in degrees
+- `zoom`: Zoom level (default: 10)
+
+**Example:**
+
+```julia
+goto!(app, -122.4194, 37.7749, zoom=12)  # San Francisco
+```
+
+---
+
+### `zoom!`
+
+```julia
+zoom!(app::GeoExplorerApp, factor)
+```
+
+Zoom the map by a factor.
+
+**Arguments:**
+
+- `app`: The GeoExplorerApp instance
+- `factor`: Zoom factor (< 1 zooms in, > 1 zooms out)
+
+**Examples:**
+
+```julia
+zoom!(app, 0.5)  # Zoom in 2x
+zoom!(app, 2.0)  # Zoom out 2x
+```
+
+---
+
+### `reset_view!`
+
+```julia
+reset_view!(app::GeoExplorerApp)
+```
+
+Reset the map view to the original extent.
+
+---
+
+### `set_center!`
+
+```julia
+set_center!(app::GeoExplorerApp, center)
+```
+
+Set the map center to given coordinates (in Web Mercator).
+
+---
+
+## Tile Providers
+
+### `available_providers`
+
+```julia
+available_providers()
+```
+
+Returns a list of available tile providers as `name => provider` pairs.
+
+**Available Providers:**
+
+- OpenStreetMap
+- Esri WorldImagery
+- Esri WorldTopoMap
+- Esri WorldStreetMap
+- CartoDB Positron
+- CartoDB DarkMatter
+
+**Example:**
+
+```julia
+providers = available_providers()
+app = explore(provider=providers[2].second)  # Esri WorldImagery
+```
+
+---
+
+### `set_provider!`
+
+```julia
+set_provider!(app::GeoExplorerApp, provider)
+```
+
+**Note:** Changing tile provider at runtime is not currently supported by Tyler.jl. Use `explore(provider=...)` to specify the provider at creation time.
+
+---
+
+## Types
+
+### `GeoExplorerApp`
+
+Main application struct containing:
+
+- `figure::Figure` - The GLMakie figure
+- `map_axis::Axis` - The map axis
+- `map::Tyler.Map` - The Tyler map object
+- `zoom_level::Observable{Int}` - Current zoom level
+- `provider` - Current tile provider
+- `extent::Extents.Extent` - Original extent
+- `cursor_pos::Observable{Tuple{Float64, Float64}}` - Cursor position (lon, lat)
+
+---
+
+## Coordinate Conversion
+
+GeoExplorer uses Web Mercator (EPSG:3857) internally but accepts WGS84 (EPSG:4326) coordinates for navigation functions.
+
+The cursor position display shows WGS84 coordinates (latitude/longitude in degrees).

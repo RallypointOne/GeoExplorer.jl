@@ -1,0 +1,26 @@
+project:
+  type: book
+  output-dir: _site
+
+engine: julia
+
+book:
+  title: "GeoExplorer.jl"
+  description: "Interactive geospatial exploration in Julia"
+  repo-url: https://github.com/RallypointOne/GeoExplorer.jl
+  chapters:
+    - index.qmd
+    - getting-started.qmd
+    - api.qmd
+  page-footer:
+    center: "Built with [Quarto](https://quarto.org) and [Julia](https://julialang.org)"
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    code-copy: true
+    code-overflow: wrap
+
+execute:
+  freeze: auto

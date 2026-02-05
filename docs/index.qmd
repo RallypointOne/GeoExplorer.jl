@@ -1,0 +1,49 @@
+---
+title: "GeoExplorer.jl"
+subtitle: "Interactive Geospatial Exploration in Julia"
+---
+
+## Overview
+
+**GeoExplorer.jl** is an interactive geospatial exploration tool built on top of [Tyler.jl](https://github.com/MakieOrg/Tyler.jl) and [GLMakie.jl](https://github.com/MakieOrg/Makie.jl). It provides an ArcGIS-like experience for exploring maps and geospatial data in Julia.
+
+## Features
+
+- **Interactive Map Exploration**: Pan, zoom, and navigate tile-based maps
+- **Multiple Tile Providers**: OpenStreetMap, Esri, CartoDB, and more
+- **Geometry Plotting**: Plot any GeoInterface-compatible geometry (Points, LineStrings, Polygons, etc.)
+- **Keyboard Navigation**: Arrow keys to pan, +/- to zoom, Home to reset
+- **Real-time Cursor Position**: Display lat/lon coordinates as you move the mouse
+- **Customizable UI**: Navigation buttons with help overlay
+
+## Quick Start
+
+```julia
+using Pkg
+Pkg.add("GeoExplorer")
+```
+
+```{julia}
+#| output: false
+using GLMakie, GeoExplorer, OSMGeocoder
+
+# Explore a geometry
+fc = geocode(city="Boulder", state="CO")  # GeoJSON.FeatureCollection
+fig = Figure(size=(800, 600))
+app = explore(fc, figure=fig)
+wait(app.map)  # wait for tiles to load
+save("boulder_map.png", fig)
+```
+
+![Boulder, CO](boulder_map.png)
+
+## Navigation
+
+| Input | Action |
+|-------|--------|
+| Arrow Keys | Pan the map |
+| +/- | Zoom in/out |
+| Home | Reset to original extent |
+| Mouse Scroll | Zoom in/out |
+| Mouse Drag | Pan the map |
+| ? Button | Show keyboard shortcuts |
