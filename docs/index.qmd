@@ -27,6 +27,9 @@ Pkg.add("GeoExplorer")
 #| output: false
 using GLMakie, GeoExplorer, OSMGeocoder
 
+# Launch the map viewer with default settings
+explore()
+
 # Explore a geometry
 fc = geocode(city="Boulder", state="CO")  # GeoJSON.FeatureCollection
 fig = Figure(size=(800, 600))
