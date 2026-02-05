@@ -8,13 +8,14 @@
 
 GeoExplorer.jl provides an ArcGIS-like experience for exploring maps and geospatial data, built on [Tyler.jl](https://github.com/MakieOrg/Tyler.jl) and [GLMakie.jl](https://github.com/MakieOrg/Makie.jl).
 
+![Boulder, CO](.github/assets/boulder_map.png)
+
 ## Features
 
 - Interactive map exploration with pan, zoom, and navigation controls
 - Multiple tile providers (OpenStreetMap, Esri, CartoDB, and more)
 - Plot any GeoInterface-compatible geometry
 - Keyboard shortcuts for navigation
-- Real-time cursor position display (lat/lon)
 
 ## Installation
 
