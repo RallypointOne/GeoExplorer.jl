@@ -8,7 +8,7 @@
 
 GeoExplorer.jl provides an ArcGIS-like experience for exploring maps and geospatial data, built on [Tyler.jl](https://github.com/MakieOrg/Tyler.jl) and [GLMakie.jl](https://github.com/MakieOrg/Makie.jl).
 
-![Boulder, CO](https://github.com/user-attachments/assets/d97e1cc6-838e-4f42-8589-866a84a4949e)
+![Boulder, CO](https://github.com/user-attachments/assets/09b8862d-4ac8-42fd-9b0d-935527608424)
 
 ## Features
 
