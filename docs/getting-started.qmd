@@ -141,6 +141,50 @@ zoom!(app, 2.0)
 set_center!(app, (x, y))
 ```
 
+## Working with Layers
+
+Layers allow you to manage multiple data overlays with visibility controls.
+
+### Adding Layers
+
+```julia
+using GeoExplorer, GLMakie
+
+app = explore()
+
+# Plot data and register as a layer
+xs, ys = [...], [...]  # Web Mercator coordinates
+plt = scatter!(app.map_axis, xs, ys; color=:red)
+add_layer!(app, "My Points", plt)
+
+# Add another layer
+line_plt = lines!(app.map_axis, xs, ys; color=:blue)
+add_layer!(app, "Connections", line_plt)
+```
+
+### Layer Controls
+
+Click the layers button (☰) in the top-right to:
+
+- Toggle layer visibility with checkboxes
+- Zoom to a layer's extent with the zoom button (⌖)
+
+### Programmatic Layer Control
+
+```julia
+# Toggle visibility
+toggle_layer!(app, "My Points")
+
+# Zoom to layer extent
+zoom_to_layer!(app, "My Points")
+
+# Get a layer by name
+layer = get_layer(app, "My Points")
+
+# Remove a layer
+remove_layer!(app, "My Points")
+```
+
 ## Using with Geocoding
 
 GeoExplorer works well with geocoding packages:

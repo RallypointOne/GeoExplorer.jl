@@ -12,9 +12,10 @@ subtitle: "Interactive Geospatial Exploration in Julia"
 - **Interactive Map Exploration**: Pan, zoom, and navigate tile-based maps
 - **Multiple Tile Providers**: OpenStreetMap, Esri, CartoDB, and more
 - **Geometry Plotting**: Plot any GeoInterface-compatible geometry (Points, LineStrings, Polygons, etc.)
+- **Layer Management**: Add, remove, toggle visibility, and zoom to layers
 - **Keyboard Navigation**: Arrow keys to pan, +/- to zoom, Home to reset
 - **Real-time Cursor Position**: Display lat/lon coordinates as you move the mouse
-- **Customizable UI**: Navigation buttons with help overlay
+- **Customizable UI**: Navigation buttons with layers panel and help overlay
 
 ## Quick Start
 
@@ -49,4 +50,5 @@ save("boulder_map.png", fig)
 | Home | Reset to original extent |
 | Mouse Scroll | Zoom in/out |
 | Mouse Drag | Pan the map |
+| ☰ Button | Open layers panel |
 | ? Button | Show keyboard shortcuts |

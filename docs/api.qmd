@@ -187,6 +187,81 @@ set_provider!(app::GeoExplorerApp, provider)
 
 ---
 
+## Layer Functions
+
+### `add_layer!`
+
+```julia
+add_layer!(app::GeoExplorerApp, name::String, plot; visible=true)
+```
+
+Add a plot as a named layer.
+
+**Arguments:**
+
+- `app`: The GeoExplorerApp instance
+- `name`: Display name for the layer
+- `plot`: A Makie plot object (from `scatter!`, `lines!`, `poly!`, etc.)
+- `visible`: Initial visibility (default: true)
+
+**Returns:** `Layer` instance
+
+**Example:**
+
+```julia
+plt = scatter!(app.map_axis, xs, ys; color=:red)
+add_layer!(app, "My Points", plt)
+```
+
+---
+
+### `remove_layer!`
+
+```julia
+remove_layer!(app::GeoExplorerApp, layer::Layer)
+remove_layer!(app::GeoExplorerApp, name::String)
+```
+
+Remove a layer from the application.
+
+---
+
+### `toggle_layer!`
+
+```julia
+toggle_layer!(layer::Layer)
+toggle_layer!(app::GeoExplorerApp, name::String)
+```
+
+Toggle the visibility of a layer.
+
+---
+
+### `get_layer`
+
+```julia
+get_layer(app::GeoExplorerApp, name::String)
+```
+
+Get a layer by name. Returns `nothing` if not found.
+
+---
+
+### `zoom_to_layer!`
+
+```julia
+zoom_to_layer!(app::GeoExplorerApp, layer::Layer; padding=0.1)
+zoom_to_layer!(app::GeoExplorerApp, name::String; padding=0.1)
+```
+
+Zoom the map to fit the extent of a layer.
+
+**Arguments:**
+
+- `padding`: Fractional padding around the layer extent (default: 0.1)
+
+---
+
 ## Types
 
 ### `GeoExplorerApp`
@@ -200,6 +275,17 @@ Main application struct containing:
 - `provider` - Current tile provider
 - `extent::Extents.Extent` - Original extent
 - `cursor_pos::Observable{Tuple{Float64, Float64}}` - Cursor position (lon, lat)
+- `layers::Vector{Layer}` - Registered layers
+
+---
+
+### `Layer`
+
+A layer that can be plotted on top of the base map.
+
+- `name::String` - Display name for the layer
+- `plot::Any` - Reference to the Makie plot object
+- `visible::Observable{Bool}` - Whether the layer is currently visible
 
 ---
 

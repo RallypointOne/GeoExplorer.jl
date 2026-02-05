@@ -237,13 +237,14 @@ end
 
 #-----------------------------------------------------------------------------# explore
 """
-    explore(; extent=Extents.Extent(X=(-125.0, -65.0), Y=(24.0, 50.0)), provider=TileProviders.OpenStreetMap())
+    explore(; extent, provider, figure)
 
 Launch the GeoExplorer application.
 
 # Keyword Arguments
 - `extent`: Initial map extent (default: Continental US)
 - `provider`: Tile provider for basemap (default: OpenStreetMap)
+- `figure`: GLMakie Figure to use (default: new 1200x800 figure)
 
 # Returns
 - `GeoExplorerApp`: The application instance
