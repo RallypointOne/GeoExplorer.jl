@@ -6,4 +6,6 @@ docs/Manifest.toml
 docs/build/
 docs/_site/
 docs/.quarto/
+docs/_freeze
 *.claude
+*.png
