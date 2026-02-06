@@ -42,11 +42,11 @@ jobs:
             Pkg.precompile()
           '
 
-      - name: Build IJulia kernel
+      - name: Install QuartoNotebookRunner
         run: |
-          julia --project=docs -e '
-            using IJulia
-            IJulia.installkernel("Julia")
+          julia -e '
+            using Pkg
+            Pkg.add("QuartoNotebookRunner")
           '
 
       - name: Setup Quarto
