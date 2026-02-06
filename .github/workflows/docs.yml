@@ -42,18 +42,13 @@ jobs:
             Pkg.precompile()
           '
 
-      - name: Install QuartoNotebookRunner
-        run: |
-          julia -e '
-            using Pkg
-            Pkg.add("QuartoNotebookRunner")
-          '
-
       - name: Setup Quarto
         uses: quarto-dev/quarto-actions/setup@v2
 
       - name: Render Quarto Project
         run: DISPLAY=:0 xvfb-run -s '-screen 0 1024x768x24' quarto render docs
+        env:
+          QUARTO_JULIA_PROJECT: docs
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
