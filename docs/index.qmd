@@ -1,6 +1,7 @@
 ---
 title: "GeoExplorer.jl"
 subtitle: "Interactive Geospatial Exploration in Julia"
+engine: julia
 ---
 
 ## Overview
