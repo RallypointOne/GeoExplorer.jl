@@ -270,11 +270,17 @@ function explore(;
 
     # Status display in top left corner
     status_layout = figure[1, 1] = GridLayout(tellwidth=false, tellheight=false, halign=:left, valign=:top, alignmode=Outside(8))
-    Box(status_layout[1:2, 1], color=(:white, 0.9), strokecolor=:gray60, strokewidth=1)
+    status_box = Box(status_layout[1:2, 1], color=(:white, 0.9), strokecolor=:gray60, strokewidth=1)
     cursor_pos_str(x) = Printf.@sprintf("(%.4f°, %.4f°)", x[1], x[2])
-    Label(status_layout[1, 1], @lift(cursor_pos_str($(app.cursor_pos))), fontsize=12, color=:gray30, halign=:left, padding=(6, 6, 4, 0))
-    Label(status_layout[2, 1], @lift("Zoom: $($(app.map.zoom))"), fontsize=12, color=:gray30, halign=:left, padding=(6, 6, 0, 4))
+    status_label1 = Label(status_layout[1, 1], @lift(cursor_pos_str($(app.cursor_pos))), fontsize=12, color=:gray30, halign=:left, padding=(6, 6, 4, 0))
+    status_label2 = Label(status_layout[2, 1], @lift("Zoom: $($(app.map.zoom))"), fontsize=12, color=:gray30, halign=:left, padding=(6, 6, 0, 4))
     rowgap!(status_layout, 0)
+
+    # Bring status UI to front
+    for block in [status_box, status_label1, status_label2]
+        translate!(block.blockscene, Vec3f(0, 0, 9000))
+    end
+
     add_map_nav!(app)
     setup_mouse_cursor!(app)
     setup_keyboard_shortcuts!(app)
@@ -589,11 +595,11 @@ function add_map_nav!(app::GeoExplorerApp;
 
     # Function to rebuild the layers list UI
     function rebuild_layers_ui!()
-        # Clear existing layer UI elements
+        # Delete existing layer UI elements
         for (name, elements) in layer_ui_elements
             for el in elements
                 try
-                    el.visible[] = false
+                    delete!(el)
                 catch
                 end
             end
@@ -603,6 +609,7 @@ function add_map_nav!(app::GeoExplorerApp;
         if isempty(app.layers)
             # Show "No layers" message
             no_layers_label = Label(layers_content[2, 1], "No layers added", fontsize=10, halign=:left, color=:gray50)
+            translate!(no_layers_label.blockscene, Vec3f(0, 0, 9000))
             layer_ui_elements["__no_layers__"] = [no_layers_label]
         else
             # Create UI for each layer: [checkbox] [name] [zoom button]
@@ -637,6 +644,11 @@ function add_map_nav!(app::GeoExplorerApp;
                     zoom_to_layer!(app, layer)
                 end
 
+                # Bring layer UI elements to front
+                for block in [checkbox, name_label, zoom_btn]
+                    translate!(block.blockscene, Vec3f(0, 0, 9000))
+                end
+
                 layer_ui_elements[layer.name] = [checkbox, name_label, zoom_btn]
             end
         end
@@ -650,15 +662,17 @@ function add_map_nav!(app::GeoExplorerApp;
         layers_header.visible[] = vis
         if vis
             rebuild_layers_ui!()
-        end
-        # Update visibility of all layer UI elements
-        for (name, elements) in layer_ui_elements
-            for el in elements
-                try
-                    el.visible[] = vis
-                catch
+        else
+            # Delete all layer UI elements when closing panel
+            for (name, elements) in layer_ui_elements
+                for el in elements
+                    try
+                        delete!(el)
+                    catch
+                    end
                 end
             end
+            empty!(layer_ui_elements)
         end
     end
 
@@ -715,6 +729,13 @@ function add_map_nav!(app::GeoExplorerApp;
 
     on(help.clicks) do _
         help_visible[] = !help_visible[]
+    end
+
+    # Bring all UI elements to front (high z-value)
+    ui_blocks = [zoom_in, zoom_out, home, help, layers_btn, layers_box, layers_header, help_box]
+    append!(ui_blocks, help_labels)
+    for block in ui_blocks
+        translate!(block.blockscene, Vec3f(0, 0, 9000))
     end
 
     return (; layout, zoom_in, zoom_out, home, layers=layers_btn, help)
