@@ -113,6 +113,181 @@ GeoExplorer supports all standard GeoInterface geometry types:
 | Feature | Plots contained geometry |
 | FeatureCollection | Plots all features |
 
+::: {.panel-tabset}
+
+## Point
+
+```{julia}
+#| output: false
+using GeoJSON, GeoExplorer, GLMakie
+
+point = GeoJSON.read("""{"type": "Point", "coordinates": [-105.27, 40.01]}""")
+
+fig = Figure(size=(600, 400))
+app = explore(point; figure=fig)
+wait(app.map)
+save("point_example.png", fig)
+```
+
+![Point geometry centered on Boulder, CO](point_example.png)
+
+## MultiPoint
+
+```{julia}
+#| output: false
+multipoint = GeoJSON.read("""
+{
+  "type": "MultiPoint",
+  "coordinates": [
+    [-105.27, 40.01],
+    [-104.99, 39.74],
+    [-105.02, 39.65]
+  ]
+}
+""")
+
+fig = Figure(size=(600, 400))
+app = explore(multipoint; figure=fig)
+wait(app.map)
+save("multipoint_example.png", fig)
+```
+
+![MultiPoint geometry showing Boulder, Denver, and Highlands Ranch](multipoint_example.png)
+
+## LineString
+
+```{julia}
+#| output: false
+linestring = GeoJSON.read("""
+{
+  "type": "LineString",
+  "coordinates": [
+    [-105.27, 40.01],
+    [-104.99, 39.74],
+    [-104.82, 39.55],
+    [-104.76, 39.10]
+  ]
+}
+""")
+
+fig = Figure(size=(600, 400))
+app = explore(linestring; figure=fig)
+wait(app.map)
+save("linestring_example.png", fig)
+```
+
+![LineString geometry along the Colorado Front Range](linestring_example.png)
+
+## MultiLineString
+
+```{julia}
+#| output: false
+multilinestring = GeoJSON.read("""
+{
+  "type": "MultiLineString",
+  "coordinates": [
+    [[-105.5, 40.0], [-105.0, 40.0], [-104.5, 40.0]],
+    [[-105.5, 39.5], [-105.0, 39.5], [-104.5, 39.5]],
+    [[-105.5, 39.0], [-105.0, 39.0], [-104.5, 39.0]]
+  ]
+}
+""")
+
+fig = Figure(size=(600, 400))
+app = explore(multilinestring; figure=fig)
+wait(app.map)
+save("multilinestring_example.png", fig)
+```
+
+![MultiLineString geometry showing parallel lines](multilinestring_example.png)
+
+## Polygon
+
+```{julia}
+#| output: false
+polygon = GeoJSON.read("""
+{
+  "type": "Polygon",
+  "coordinates": [[
+    [-105.3, 40.1],
+    [-105.1, 40.1],
+    [-105.1, 39.9],
+    [-105.3, 39.9],
+    [-105.3, 40.1]
+  ]]
+}
+""")
+
+fig = Figure(size=(600, 400))
+app = explore(polygon; figure=fig)
+wait(app.map)
+save("polygon_example.png", fig)
+```
+
+![Polygon geometry near Boulder, CO](polygon_example.png)
+
+## MultiPolygon
+
+```{julia}
+#| output: false
+multipolygon = GeoJSON.read("""
+{
+  "type": "MultiPolygon",
+  "coordinates": [
+    [[[-105.3, 40.1], [-105.1, 40.1], [-105.1, 39.95], [-105.3, 39.95], [-105.3, 40.1]]],
+    [[[-105.1, 39.85], [-104.9, 39.85], [-104.9, 39.7], [-105.1, 39.7], [-105.1, 39.85]]]
+  ]
+}
+""")
+
+fig = Figure(size=(600, 400))
+app = explore(multipolygon; figure=fig)
+wait(app.map)
+save("multipolygon_example.png", fig)
+```
+
+![MultiPolygon geometry showing two separate areas](multipolygon_example.png)
+
+## FeatureCollection
+
+```{julia}
+#| output: false
+featurecollection = GeoJSON.read("""
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {"name": "Boulder"},
+      "geometry": {"type": "Point", "coordinates": [-105.27, 40.01]}
+    },
+    {
+      "type": "Feature",
+      "properties": {"name": "Denver"},
+      "geometry": {"type": "Point", "coordinates": [-104.99, 39.74]}
+    },
+    {
+      "type": "Feature",
+      "properties": {"name": "Route"},
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [[-105.27, 40.01], [-104.99, 39.74]]
+      }
+    }
+  ]
+}
+""")
+
+fig = Figure(size=(600, 400))
+app = explore(featurecollection; figure=fig)
+wait(app.map)
+save("featurecollection_example.png", fig)
+```
+
+![FeatureCollection with points and a connecting line](featurecollection_example.png)
+
+:::
+
 ## Programmatic Navigation
 
 ### Navigate to a Location
