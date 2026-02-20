@@ -1,8 +1,9 @@
-# GeoExplorer.jl
-
 [![CI](https://github.com/RallypointOne/GeoExplorer.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/RallypointOne/GeoExplorer.jl/actions/workflows/CI.yml)
-[![Docs](https://github.com/RallypointOne/GeoExplorer.jl/actions/workflows/docs.yml/badge.svg)](https://github.com/RallypointOne/GeoExplorer.jl/actions/workflows/docs.yml)
-[![Documentation](https://img.shields.io/badge/docs-stable-blue.svg)](https://rallypointone.github.io/GeoExplorer.jl/)
+[![Docs Build](https://github.com/RallypointOne/GeoExplorer.jl/actions/workflows/Docs.yml/badge.svg)](https://github.com/RallypointOne/GeoExplorer.jl/actions/workflows/Docs.yml)
+[![Stable Docs](https://img.shields.io/badge/docs-stable-blue)](https://RallypointOne.github.io/GeoExplorer.jl/stable/)
+[![Dev Docs](https://img.shields.io/badge/docs-dev-blue)](https://RallypointOne.github.io/GeoExplorer.jl/dev/)
+
+# GeoExplorer.jl
 
 **Interactive geospatial exploration in Julia.**
 

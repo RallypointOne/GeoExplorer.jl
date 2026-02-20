@@ -1,0 +1,66 @@
+---
+title: Benchmarks
+engine: julia
+---
+
+```{julia}
+#| echo: false
+import JSON3
+
+json = try
+    read(`git show origin/benchmark-results:results.json`, String)
+catch
+    nothing
+end
+
+if isnothing(json)
+    println("*No benchmark results available yet.*")
+    println()
+    println("Run benchmarks locally and push results to the `benchmark-results` branch:")
+    println()
+    println("```bash")
+    println("julia --project=benchmark benchmark/run.jl")
+    println("bash benchmark/push_results.sh")
+    println("```")
+else
+    data = JSON3.read(json)
+
+    println("| **Julia Version** | $(data.julia_version) |")
+    println("|:--|:--|")
+    println("| **CPU** | $(data.cpu) |")
+    println("| **Timestamp** | $(data.timestamp) |")
+    println()
+
+    # Helper to format time
+    function fmt_time(ns)
+        if ns < 1_000
+            "$(round(ns, digits=1)) ns"
+        elseif ns < 1_000_000
+            "$(round(ns / 1_000, digits=2)) μs"
+        elseif ns < 1_000_000_000
+            "$(round(ns / 1_000_000, digits=2)) ms"
+        else
+            "$(round(ns / 1_000_000_000, digits=2)) s"
+        end
+    end
+
+    # Helper to format memory
+    function fmt_mem(bytes)
+        if bytes < 1024
+            "$bytes B"
+        elseif bytes < 1024^2
+            "$(round(bytes / 1024, digits=1)) KiB"
+        elseif bytes < 1024^3
+            "$(round(bytes / 1024^2, digits=1)) MiB"
+        else
+            "$(round(bytes / 1024^3, digits=1)) GiB"
+        end
+    end
+
+    println("| Benchmark | Median Time | Memory | Allocations |")
+    println("|:----------|:------------|:-------|:------------|")
+    for b in data.benchmarks
+        println("| `$(b.name)` | $(fmt_time(b.time_ns)) | $(fmt_mem(b.memory_bytes)) | $(b.allocs) |")
+    end
+end
+```

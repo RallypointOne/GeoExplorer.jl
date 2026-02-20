@@ -3,24 +3,55 @@ project:
   output-dir: _site
 
 engine: julia
+julia:
+  project: "."
 
 book:
   title: "GeoExplorer.jl"
   description: "Interactive geospatial exploration in Julia"
-  repo-url: https://github.com/RallypointOne/GeoExplorer.jl
+  search:
+    location: sidebar
+    keyboard-shortcut:
+      - "/"
+  navbar:
+    right:
+      - icon: star
+        href: https://github.com/RallypointOne/GeoExplorer.jl/stargazers
+        text: "Star"
+      - icon: github
+        href: https://github.com/RallypointOne/GeoExplorer.jl
   chapters:
-    - index.qmd
-    - getting-started.qmd
-    - api.qmd
+    - part: "Docs"
+      chapters:
+        - index.qmd
+        - getting-started.qmd
+    - part: "API"
+      chapters:
+        - api.qmd
+    - part: "Resources"
+      chapters:
+        - resources/benchmarks.qmd
+        - resources/changelog.qmd
+        - resources/coverage.qmd
+
   page-footer:
-    center: "Built with [Quarto](https://quarto.org) and [Julia](https://julialang.org)"
+    center: "Built on __BUILD_DATE__"
+
+language:
+  search-text-placeholder: "Search  (/)"
 
 format:
   html:
-    theme: cosmo
-    toc: true
+    css: styles.css
+    number-sections: false
+    theme:
+      light: flatly
+      dark: darkly
+    respect-user-color-scheme: true
     code-copy: true
     code-overflow: wrap
+    include-after-body:
+      - file: _version-selector.html
 
 execute:
   freeze: auto
