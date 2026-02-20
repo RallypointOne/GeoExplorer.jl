@@ -1,0 +1,222 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "GeoExplorer.jl",
+    "section": "",
+    "text": "Overview\nGeoExplorer.jl is an interactive geospatial exploration tool built on top of Tyler.jl and GLMakie.jl. It provides an ArcGIS-like experience for exploring maps and geospatial data in Julia.",
+    "crumbs": [
+      "Docs",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>GeoExplorer.jl</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#features",
+    "href": "index.html#features",
+    "title": "GeoExplorer.jl",
+    "section": "Features",
+    "text": "Features\n\nInteractive Map Exploration: Pan, zoom, and navigate tile-based maps\nMultiple Tile Providers: OpenStreetMap, Esri, CartoDB, and more\nGeometry Plotting: Plot any GeoInterface-compatible geometry (Points, LineStrings, Polygons, etc.)\nLayer Management: Add, remove, toggle visibility, and zoom to layers\nKeyboard Navigation: Arrow keys to pan, +/- to zoom, Home to reset\nReal-time Cursor Position: Display lat/lon coordinates as you move the mouse\nCustomizable UI: Navigation buttons with layers panel and help overlay",
+    "crumbs": [
+      "Docs",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>GeoExplorer.jl</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#quick-start",
+    "href": "index.html#quick-start",
+    "title": "GeoExplorer.jl",
+    "section": "Quick Start",
+    "text": "Quick Start\nusing Pkg\nPkg.add(\"GeoExplorer\")\n\nusing GLMakie, GeoExplorer, OSMGeocoder\n\n# Launch the map viewer with default settings\nexplore()\n\n# Explore a geometry\nfc = geocode(city=\"Boulder\", state=\"CO\")  # GeoJSON.FeatureCollection\nfig = Figure(size=(800, 600))\napp = explore(fc, figure=fig)\nwait(app.map)  # wait for tiles to load\nsave(\"boulder_map.png\", fig)\n\n\n\n\nBoulder, CO",
+    "crumbs": [
+      "Docs",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>GeoExplorer.jl</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#navigation",
+    "href": "index.html#navigation",
+    "title": "GeoExplorer.jl",
+    "section": "Navigation",
+    "text": "Navigation\n\n\n\nInput\nAction\n\n\n\n\nArrow Keys\nPan the map\n\n\n+/-\nZoom in/out\n\n\nHome\nReset to original extent\n\n\nMouse Scroll\nZoom in/out\n\n\nMouse Drag\nPan the map\n\n\n☰ Button\nOpen layers panel\n\n\n? Button\nShow keyboard shortcuts",
+    "crumbs": [
+      "Docs",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>GeoExplorer.jl</span>"
+    ]
+  },
+  {
+    "objectID": "getting-started.html",
+    "href": "getting-started.html",
+    "title": "Getting Started",
+    "section": "",
+    "text": "Installation\nGeoExplorer.jl can be installed from the Julia package manager:",
+    "crumbs": [
+      "Docs",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting Started</span>"
+    ]
+  },
+  {
+    "objectID": "getting-started.html#installation",
+    "href": "getting-started.html#installation",
+    "title": "Getting Started",
+    "section": "",
+    "text": "using Pkg\nPkg.add(\"GeoExplorer\")",
+    "crumbs": [
+      "Docs",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting Started</span>"
+    ]
+  },
+  {
+    "objectID": "getting-started.html#basic-usage",
+    "href": "getting-started.html#basic-usage",
+    "title": "Getting Started",
+    "section": "Basic Usage",
+    "text": "Basic Usage\n\nLaunching the Explorer\nThe simplest way to start exploring is to call explore():\nusing GeoExplorer\n\napp = explore()\nThis opens an interactive map centered on the Continental United States using OpenStreetMap tiles.\n\n\nCustom Extent\nYou can specify a custom initial extent:\nusing GeoExplorer, Extents\n\n# View of London\napp = explore(extent=Extents.Extent(X=(-0.2, 0.2), Y=(51.4, 51.6)))\n\n# View of Tokyo\napp = explore(extent=Extents.Extent(X=(139.5, 140.0), Y=(35.5, 35.9)))\n\n\nTile Providers\nGeoExplorer supports multiple tile providers:\nusing GeoExplorer\nimport Tyler.TileProviders\n\n# List available providers\nproviders = available_providers()\n\n# Use Esri World Imagery (satellite)\napp = explore(provider=TileProviders.Esri(:WorldImagery))\n\n# Use CartoDB Dark Matter\napp = explore(provider=TileProviders.CartoDB(:DarkMatter))\n\n# Use Esri Topographic\napp = explore(provider=TileProviders.Esri(:WorldTopoMap))",
+    "crumbs": [
+      "Docs",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting Started</span>"
+    ]
+  },
+  {
+    "objectID": "getting-started.html#working-with-geometries",
+    "href": "getting-started.html#working-with-geometries",
+    "title": "Getting Started",
+    "section": "Working with Geometries",
+    "text": "Working with Geometries\n\nExploring a Geometry\nYou can pass any GeoInterface-compatible geometry directly to explore():\nusing GeoExplorer, GeoJSON\n\n# Load a GeoJSON file\ngeom = GeoJSON.read(\"my_data.geojson\")\n\n# Explore it - extent is automatically calculated\napp = explore(geom)\n\n# With custom padding around the geometry (default: 10%)\napp = explore(geom, padding=0.2)  # 20% padding\n\n\nAdding Geometries to an Existing Map\nUse plot_geometry! to add geometries to an existing app:\nusing GeoExplorer, GeoJSON\n\napp = explore()\n\n# Load and plot a geometry\ngeom = GeoJSON.read(\"boundaries.geojson\")\nplot_geometry!(app, geom)\n\n# Customize appearance\nplot_geometry!(app, geom, color=:green, strokecolor=:darkgreen, strokewidth=3)\n\n\nSupported Geometry Types\nGeoExplorer supports all standard GeoInterface geometry types:\n\n\n\nGeometry Type\nDefault Style\n\n\n\n\nPoint\nRed markers\n\n\nMultiPoint\nRed markers\n\n\nLineString\nBlue lines\n\n\nMultiLineString\nBlue lines\n\n\nPolygon\nSemi-transparent blue fill with blue stroke\n\n\nMultiPolygon\nSemi-transparent blue fill with blue stroke\n\n\nGeometryCollection\nRecursive plotting\n\n\nFeature\nPlots contained geometry\n\n\nFeatureCollection\nPlots all features\n\n\n\n\nPointMultiPointLineStringMultiLineStringPolygonMultiPolygonFeatureCollection\n\n\n\nusing GeoJSON, GeoExplorer, GLMakie\n\npoint = GeoJSON.read(\"\"\"{\"type\": \"Point\", \"coordinates\": [-105.27, 40.01]}\"\"\")\n\nfig = Figure(size=(600, 400))\napp = explore(point; figure=fig)\nwait(app.map)\nsave(\"point_example.png\", fig)\n\n\n\n\nPoint geometry centered on Boulder, CO\n\n\n\n\n\nmultipoint = GeoJSON.read(\"\"\"\n{\n  \"type\": \"MultiPoint\",\n  \"coordinates\": [\n    [-105.27, 40.01],\n    [-104.99, 39.74],\n    [-105.02, 39.65]\n  ]\n}\n\"\"\")\n\nfig = Figure(size=(600, 400))\napp = explore(multipoint; figure=fig)\nwait(app.map)\nsave(\"multipoint_example.png\", fig)\n\n\n\n\nMultiPoint geometry showing Boulder, Denver, and Highlands Ranch\n\n\n\n\n\nlinestring = GeoJSON.read(\"\"\"\n{\n  \"type\": \"LineString\",\n  \"coordinates\": [\n    [-105.27, 40.01],\n    [-104.99, 39.74],\n    [-104.82, 39.55],\n    [-104.76, 39.10]\n  ]\n}\n\"\"\")\n\nfig = Figure(size=(600, 400))\napp = explore(linestring; figure=fig)\nwait(app.map)\nsave(\"linestring_example.png\", fig)\n\n\n\n\nLineString geometry along the Colorado Front Range\n\n\n\n\n\nmultilinestring = GeoJSON.read(\"\"\"\n{\n  \"type\": \"MultiLineString\",\n  \"coordinates\": [\n    [[-105.5, 40.0], [-105.0, 40.0], [-104.5, 40.0]],\n    [[-105.5, 39.5], [-105.0, 39.5], [-104.5, 39.5]],\n    [[-105.5, 39.0], [-105.0, 39.0], [-104.5, 39.0]]\n  ]\n}\n\"\"\")\n\nfig = Figure(size=(600, 400))\napp = explore(multilinestring; figure=fig)\nwait(app.map)\nsave(\"multilinestring_example.png\", fig)\n\n\n\n\nMultiLineString geometry showing parallel lines\n\n\n\n\n\npolygon = GeoJSON.read(\"\"\"\n{\n  \"type\": \"Polygon\",\n  \"coordinates\": [[\n    [-105.3, 40.1],\n    [-105.1, 40.1],\n    [-105.1, 39.9],\n    [-105.3, 39.9],\n    [-105.3, 40.1]\n  ]]\n}\n\"\"\")\n\nfig = Figure(size=(600, 400))\napp = explore(polygon; figure=fig)\nwait(app.map)\nsave(\"polygon_example.png\", fig)\n\n\n\n\nPolygon geometry near Boulder, CO\n\n\n\n\n\nmultipolygon = GeoJSON.read(\"\"\"\n{\n  \"type\": \"MultiPolygon\",\n  \"coordinates\": [\n    [[[-105.3, 40.1], [-105.1, 40.1], [-105.1, 39.95], [-105.3, 39.95], [-105.3, 40.1]]],\n    [[[-105.1, 39.85], [-104.9, 39.85], [-104.9, 39.7], [-105.1, 39.7], [-105.1, 39.85]]]\n  ]\n}\n\"\"\")\n\nfig = Figure(size=(600, 400))\napp = explore(multipolygon; figure=fig)\nwait(app.map)\nsave(\"multipolygon_example.png\", fig)\n\n\n\n\nMultiPolygon geometry showing two separate areas\n\n\n\n\n\nfeaturecollection = GeoJSON.read(\"\"\"\n{\n  \"type\": \"FeatureCollection\",\n  \"features\": [\n    {\n      \"type\": \"Feature\",\n      \"properties\": {\"name\": \"Boulder\"},\n      \"geometry\": {\"type\": \"Point\", \"coordinates\": [-105.27, 40.01]}\n    },\n    {\n      \"type\": \"Feature\",\n      \"properties\": {\"name\": \"Denver\"},\n      \"geometry\": {\"type\": \"Point\", \"coordinates\": [-104.99, 39.74]}\n    },\n    {\n      \"type\": \"Feature\",\n      \"properties\": {\"name\": \"Route\"},\n      \"geometry\": {\n        \"type\": \"LineString\",\n        \"coordinates\": [[-105.27, 40.01], [-104.99, 39.74]]\n      }\n    }\n  ]\n}\n\"\"\")\n\nfig = Figure(size=(600, 400))\napp = explore(featurecollection; figure=fig)\nwait(app.map)\nsave(\"featurecollection_example.png\", fig)\n\n\n\n\nFeatureCollection with points and a connecting line",
+    "crumbs": [
+      "Docs",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting Started</span>"
+    ]
+  },
+  {
+    "objectID": "getting-started.html#programmatic-navigation",
+    "href": "getting-started.html#programmatic-navigation",
+    "title": "Getting Started",
+    "section": "Programmatic Navigation",
+    "text": "Programmatic Navigation\n\nNavigate to a Location\nusing GeoExplorer\n\napp = explore()\n\n# Go to a specific lat/lon with zoom level\ngoto!(app, -122.4194, 37.7749, zoom=12)  # San Francisco\n\n# Reset to original extent\nreset_view!(app)\n\n\nZoom and Pan\n# Zoom in (factor &lt; 1)\nzoom!(app, 0.5)\n\n# Zoom out (factor &gt; 1)\nzoom!(app, 2.0)\n\n# Set center (in Web Mercator coordinates)\nset_center!(app, (x, y))",
+    "crumbs": [
+      "Docs",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting Started</span>"
+    ]
+  },
+  {
+    "objectID": "getting-started.html#working-with-layers",
+    "href": "getting-started.html#working-with-layers",
+    "title": "Getting Started",
+    "section": "Working with Layers",
+    "text": "Working with Layers\nLayers allow you to manage multiple data overlays with visibility controls.\n\nAdding Layers\nusing GeoExplorer, GLMakie\n\napp = explore()\n\n# Plot data and register as a layer\nxs, ys = [...], [...]  # Web Mercator coordinates\nplt = scatter!(app.map_axis, xs, ys; color=:red)\nadd_layer!(app, \"My Points\", plt)\n\n# Add another layer\nline_plt = lines!(app.map_axis, xs, ys; color=:blue)\nadd_layer!(app, \"Connections\", line_plt)\n\n\nLayer Controls\nClick the layers button (☰) in the top-right to:\n\nToggle layer visibility with checkboxes\nZoom to a layer’s extent with the zoom button (⌖)\n\n\n\nProgrammatic Layer Control\n# Toggle visibility\ntoggle_layer!(app, \"My Points\")\n\n# Zoom to layer extent\nzoom_to_layer!(app, \"My Points\")\n\n# Get a layer by name\nlayer = get_layer(app, \"My Points\")\n\n# Remove a layer\nremove_layer!(app, \"My Points\")",
+    "crumbs": [
+      "Docs",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting Started</span>"
+    ]
+  },
+  {
+    "objectID": "getting-started.html#using-with-geocoding",
+    "href": "getting-started.html#using-with-geocoding",
+    "title": "Getting Started",
+    "section": "Using with Geocoding",
+    "text": "Using with Geocoding\nGeoExplorer works well with geocoding packages:\nusing GeoExplorer, OSMGeocoder\n\n# Geocode a city and explore it\nresult = geocode(city=\"Boulder\", state=\"CO\")\n\napp = explore(result)",
+    "crumbs": [
+      "Docs",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting Started</span>"
+    ]
+  },
+  {
+    "objectID": "api.html",
+    "href": "api.html",
+    "title": "API Reference",
+    "section": "",
+    "text": "Main Functions",
+    "crumbs": [
+      "API",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>API Reference</span>"
+    ]
+  },
+  {
+    "objectID": "api.html#main-functions",
+    "href": "api.html#main-functions",
+    "title": "API Reference",
+    "section": "",
+    "text": "explore\nexplore(; extent, provider, figure)\nexplore(geometry; padding=0.1, kw...)\nLaunch the GeoExplorer application.\nKeyword Arguments:\n\nextent: Initial map extent (default: Continental US)\nprovider: Tile provider for basemap (default: OpenStreetMap)\nfigure: Makie Figure to use (default: creates new 1200x800 figure)\n\nWith Geometry:\n\ngeometry: Any GeoInterface-compatible geometry\npadding: Fractional padding around geometry extent (default: 0.1)\n\nReturns: GeoExplorerApp instance\nExamples:\n# Default view\napp = explore()\n\n# Custom extent\napp = explore(extent=Extents.Extent(X=(-74.1, -73.9), Y=(40.7, 40.8)))\n\n# With tile provider\napp = explore(provider=TileProviders.Esri(:WorldImagery))\n\n# With geometry\ngeom = GeoJSON.read(\"data.geojson\")\napp = explore(geom)\n\n\n\nplot_geometry!\nplot_geometry!(app::GeoExplorerApp, geometry; kw...)\nPlot a GeoInterface-compatible geometry on the map.\nArguments:\n\napp: The GeoExplorerApp instance\ngeometry: Any GeoInterface-compatible geometry\n\nKeyword Arguments (vary by geometry type):\n\n\n\n\n\n\n\nGeometry\nKeywords\n\n\n\n\nPoint/MultiPoint\ncolor=:red, markersize=10\n\n\nLineString/MultiLineString\ncolor=:blue, linewidth=2\n\n\nPolygon/MultiPolygon\ncolor=(:blue, 0.3), strokecolor=:blue, strokewidth=2\n\n\n\nExamples:\napp = explore()\n\n# Plot with defaults\nplot_geometry!(app, geom)\n\n# Customize appearance\nplot_geometry!(app, polygon, color=(:green, 0.5), strokecolor=:darkgreen)\nplot_geometry!(app, line, color=:red, linewidth=3)\nplot_geometry!(app, points, color=:orange, markersize=15)",
+    "crumbs": [
+      "API",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>API Reference</span>"
+    ]
+  },
+  {
+    "objectID": "api.html#navigation-functions",
+    "href": "api.html#navigation-functions",
+    "title": "API Reference",
+    "section": "Navigation Functions",
+    "text": "Navigation Functions\n\ngoto!\ngoto!(app::GeoExplorerApp, lon, lat; zoom=10)\nNavigate to a specific longitude/latitude location.\nArguments:\n\napp: The GeoExplorerApp instance\nlon: Longitude in degrees\nlat: Latitude in degrees\nzoom: Zoom level (default: 10)\n\nExample:\ngoto!(app, -122.4194, 37.7749, zoom=12)  # San Francisco\n\n\n\nzoom!\nzoom!(app::GeoExplorerApp, factor)\nZoom the map by a factor.\nArguments:\n\napp: The GeoExplorerApp instance\nfactor: Zoom factor (&lt; 1 zooms in, &gt; 1 zooms out)\n\nExamples:\nzoom!(app, 0.5)  # Zoom in 2x\nzoom!(app, 2.0)  # Zoom out 2x\n\n\n\nreset_view!\nreset_view!(app::GeoExplorerApp)\nReset the map view to the original extent.\n\n\n\nset_center!\nset_center!(app::GeoExplorerApp, center)\nSet the map center to given coordinates (in Web Mercator).",
+    "crumbs": [
+      "API",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>API Reference</span>"
+    ]
+  },
+  {
+    "objectID": "api.html#tile-providers",
+    "href": "api.html#tile-providers",
+    "title": "API Reference",
+    "section": "Tile Providers",
+    "text": "Tile Providers\n\navailable_providers\navailable_providers()\nReturns a list of available tile providers as name =&gt; provider pairs.\nAvailable Providers:\n\nOpenStreetMap\nEsri WorldImagery\nEsri WorldTopoMap\nEsri WorldStreetMap\nCartoDB Positron\nCartoDB DarkMatter\n\nExample:\nproviders = available_providers()\napp = explore(provider=providers[2].second)  # Esri WorldImagery\n\n\n\nset_provider!\nset_provider!(app::GeoExplorerApp, provider)\nNote: Changing tile provider at runtime is not currently supported by Tyler.jl. Use explore(provider=...) to specify the provider at creation time.",
+    "crumbs": [
+      "API",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>API Reference</span>"
+    ]
+  },
+  {
+    "objectID": "api.html#layer-functions",
+    "href": "api.html#layer-functions",
+    "title": "API Reference",
+    "section": "Layer Functions",
+    "text": "Layer Functions\n\nadd_layer!\nadd_layer!(app::GeoExplorerApp, name::String, plot; visible=true)\nAdd a plot as a named layer.\nArguments:\n\napp: The GeoExplorerApp instance\nname: Display name for the layer\nplot: A Makie plot object (from scatter!, lines!, poly!, etc.)\nvisible: Initial visibility (default: true)\n\nReturns: Layer instance\nExample:\nplt = scatter!(app.map_axis, xs, ys; color=:red)\nadd_layer!(app, \"My Points\", plt)\n\n\n\nremove_layer!\nremove_layer!(app::GeoExplorerApp, layer::Layer)\nremove_layer!(app::GeoExplorerApp, name::String)\nRemove a layer from the application.\n\n\n\ntoggle_layer!\ntoggle_layer!(layer::Layer)\ntoggle_layer!(app::GeoExplorerApp, name::String)\nToggle the visibility of a layer.\n\n\n\nget_layer\nget_layer(app::GeoExplorerApp, name::String)\nGet a layer by name. Returns nothing if not found.\n\n\n\nzoom_to_layer!\nzoom_to_layer!(app::GeoExplorerApp, layer::Layer; padding=0.1)\nzoom_to_layer!(app::GeoExplorerApp, name::String; padding=0.1)\nZoom the map to fit the extent of a layer.\nArguments:\n\npadding: Fractional padding around the layer extent (default: 0.1)",
+    "crumbs": [
+      "API",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>API Reference</span>"
+    ]
+  },
+  {
+    "objectID": "api.html#types",
+    "href": "api.html#types",
+    "title": "API Reference",
+    "section": "Types",
+    "text": "Types\n\nGeoExplorerApp\nMain application struct containing:\n\nfigure::Figure - The GLMakie figure\nmap_axis::Axis - The map axis\nmap::Tyler.Map - The Tyler map object\nzoom_level::Observable{Int} - Current zoom level\nprovider - Current tile provider\nextent::Extents.Extent - Original extent\ncursor_pos::Observable{Tuple{Float64, Float64}} - Cursor position (lon, lat)\nlayers::Vector{Layer} - Registered layers\n\n\n\n\nLayer\nA layer that can be plotted on top of the base map.\n\nname::String - Display name for the layer\nplot::Any - Reference to the Makie plot object\nvisible::Observable{Bool} - Whether the layer is currently visible",
+    "crumbs": [
+      "API",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>API Reference</span>"
+    ]
+  },
+  {
+    "objectID": "api.html#coordinate-conversion",
+    "href": "api.html#coordinate-conversion",
+    "title": "API Reference",
+    "section": "Coordinate Conversion",
+    "text": "Coordinate Conversion\nGeoExplorer uses Web Mercator (EPSG:3857) internally but accepts WGS84 (EPSG:4326) coordinates for navigation functions.\nThe cursor position display shows WGS84 coordinates (latitude/longitude in degrees).",
+    "crumbs": [
+      "API",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>API Reference</span>"
+    ]
+  },
+  {
+    "objectID": "resources/benchmarks.html",
+    "href": "resources/benchmarks.html",
+    "title": "Benchmarks",
+    "section": "",
+    "text": "fatal: invalid object name 'origin/benchmark-results'.\n*No benchmark results available yet.*\n\nRun benchmarks locally and push results to the `benchmark-results` branch:\n\n```bash\njulia --project=benchmark benchmark/run.jl\nbash benchmark/push_results.sh\n```",
+    "crumbs": [
+      "Resources",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Benchmarks</span>"
+    ]
+  },
+  {
+    "objectID": "resources/changelog.html",
+    "href": "resources/changelog.html",
+    "title": "Changelog",
+    "section": "",
+    "text": "Unreleased",
+    "crumbs": [
+      "Resources",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Changelog</span>"
+    ]
+  }
+]
