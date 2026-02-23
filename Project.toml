@@ -20,6 +20,12 @@ Shapefile = "8e980c4a-a4fe-5da2-b3a7-4b4b0353a2f4"
 TileProviders = "263fe934-28e1-4ae9-998a-c2629c5fede6"
 Tyler = "e170d443-b9d6-418a-9ee8-061e966341ef"
 
+[weakdeps]
+OverpassAPI = "78759bb8-e702-4122-98f4-c2c710342d47"
+
+[extensions]
+GeoExplorerOverpassAPIExt = "OverpassAPI"
+
 [compat]
 ColorSchemes = "3.31.0"
 Colors = "0.13.1"
@@ -30,6 +36,7 @@ GeoJSON = "0.8.4"
 GeoMakie = "0.7.16"
 OSMGeocoder = "0.0.1"
 OrderedCollections = "1.8.1"
+OverpassAPI = "0.1.0"
 Printf = "1.11.0"
 Proj = "1.9.0"
 Reexport = "1.2.2"

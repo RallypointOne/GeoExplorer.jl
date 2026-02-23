@@ -33,7 +33,11 @@ export
     remove_layer!,
     toggle_layer!,
     get_layer,
-    zoom_to_layer!
+    zoom_to_layer!,
+
+    # Extensions
+    OverpassFeature,
+    add_overpass_controls!
 
 #-----------------------------------------------------------------------------# Layer
 """
@@ -776,5 +780,34 @@ function available_providers()
     ]
 end
 
+
+#-----------------------------------------------------------------------------# OverpassAPI Extension
+"""
+    OverpassFeature(name, query; color=:gray, plot_type=:lines)
+
+Configuration for an Overpass API feature layer.
+
+# Fields
+- `name::String` - Display name for the toggle button
+- `query::Any` - An `OQL` query expression (e.g. `OQL.way["highway"]`)
+- `color::Any` - Color for plotting (any valid Makie color)
+- `plot_type::Symbol` - One of `:lines`, `:poly`, or `:scatter`
+"""
+struct OverpassFeature
+    name::String
+    query::Any
+    color::Any
+    plot_type::Symbol
+end
+OverpassFeature(name, query; color=:gray, plot_type=:lines) = OverpassFeature(name, query, color, plot_type)
+
+"""
+    add_overpass_controls!(app::GeoExplorerApp; features)
+
+Add Overpass API toggle buttons to the map. Requires `OverpassAPI` to be loaded.
+
+See the `GeoExplorerOverpassAPIExt` extension for the implementation.
+"""
+function add_overpass_controls! end
 
 end # module
