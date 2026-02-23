@@ -25,6 +25,7 @@ book:
       chapters:
         - index.qmd
         - getting-started.qmd
+        - overpass.qmd
     - part: "API"
       chapters:
         - api.qmd

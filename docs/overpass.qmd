@@ -1,0 +1,85 @@
+---
+title: "Overpass API Extension"
+---
+
+The **OverpassAPI extension** adds toggle buttons to the map for fetching and displaying [OpenStreetMap](https://www.openstreetmap.org/) features (roads, buildings, parks, etc.) via the [Overpass API](https://overpass-api.de/).
+
+## Setup
+
+The extension activates automatically when both `GeoExplorer` and [`OverpassAPI`](https://github.com/RallypointOne/OverpassAPI.jl) are loaded:
+
+```julia
+using Pkg
+Pkg.add(url="https://github.com/RallypointOne/OverpassAPI.jl")
+```
+
+```julia
+using GeoExplorer, OverpassAPI
+```
+
+## Quick Start
+
+```julia
+using GeoExplorer, OverpassAPI, Extents
+
+# Launch map centered on Boulder, CO
+app = explore(extent=Extents.Extent(X=(-105.30, -105.25), Y=(40.00, 40.03)))
+
+# Add Overpass controls with default features
+add_overpass_controls!(app)
+```
+
+This adds a panel of toggle buttons in the bottom-left corner of the map. Click a button to fetch and display that feature type for the visible map extent. Click again to hide it. Use **Refresh** to re-fetch active features after panning or zooming.
+
+## Default Features
+
+| Button | Query | Plot Style |
+|--------|-------|------------|
+| Roads | `OQL.way["highway"]` | Gray lines |
+| Buildings | `OQL.way["building"]` | Orange polygons |
+| Water | `OQL.way["natural" => "water"]` | Blue polygons |
+| Parks | `OQL.way["leisure" => "park"]` | Green polygons |
+| Amenities | `OQL.node["amenity"]` | Red scatter |
+
+## Custom Features
+
+Use `OverpassFeature` to define your own feature buttons:
+
+```julia
+using GeoExplorer, OverpassAPI, Extents
+using OverpassAPI: OQL
+
+app = explore(extent=Extents.Extent(X=(-105.30, -105.25), Y=(40.00, 40.03)))
+
+add_overpass_controls!(app, features=[
+    OverpassFeature("Roads",       OQL.way["highway"],                    :gray50,     :lines),
+    OverpassFeature("Buildings",   OQL.way["building"],                   :orange,     :poly),
+    OverpassFeature("Restaurants", OQL.node["amenity" => "restaurant"],   :red,        :scatter),
+    OverpassFeature("Schools",     OQL.node["amenity" => "school"],       :purple,     :scatter),
+])
+```
+
+### `OverpassFeature` Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `name` | `String` | Label for the toggle button |
+| `query` | `Any` | An `OQL` query expression |
+| `color` | `Any` | Any valid Makie color |
+| `plot_type` | `Symbol` | `:lines`, `:poly`, or `:scatter` |
+
+### Keyword Constructor
+
+```julia
+# Positional
+OverpassFeature("Roads", OQL.way["highway"], :gray, :lines)
+
+# Keyword (color and plot_type have defaults)
+OverpassFeature("Roads", OQL.way["highway"]; color=:gray, plot_type=:lines)
+```
+
+## Tips
+
+- **Zoom in** before fetching — large extents can return a lot of data and slow down the Overpass API.
+- Use **Refresh** after panning/zooming to update active layers for the new view.
+- The `:poly` plot type works best for closed ways (buildings, parks, water bodies). Use `:lines` for open ways (roads, paths).
