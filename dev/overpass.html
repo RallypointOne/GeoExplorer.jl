@@ -8,7 +8,7 @@
 
 <meta name="description" content="Interactive geospatial exploration in Julia">
 
-<title>Coverage – GeoExplorer.jl</title>
+<title>Overpass API Extension – GeoExplorer.jl</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,32 +21,68 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<link href="../resources/changelog.html" rel="prev">
-<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-4d9afe2b8d18ee9fa5d0d57b5ed4214d.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-2224040f4fefe4283b60316438dc26cb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-93fbee3f610651ab01c6450f67ac1de4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-2224040f4fefe4283b60316438dc26cb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./api.html" rel="next">
+<link href="./getting-started.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-4d9afe2b8d18ee9fa5d0d57b5ed4214d.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-2224040f4fefe4283b60316438dc26cb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-93fbee3f610651ab01c6450f67ac1de4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-2224040f4fefe4283b60316438dc26cb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -73,7 +109,7 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="styles.css">
 </head>
 
 <body class="nav-sidebar floating nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -254,7 +290,7 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../index.html">
+    <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">GeoExplorer.jl</span>
     </a>
   </div>
@@ -285,7 +321,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../resources/benchmarks.html">Resources</a></li><li class="breadcrumb-item"><a href="../resources/coverage.html"><span class="chapter-title">Coverage</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Docs</a></li><li class="breadcrumb-item"><a href="./overpass.html"><span class="chapter-title">Overpass API Extension</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -316,17 +352,17 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../index.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">GeoExplorer.jl</span></a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">GeoExplorer.jl</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../getting-started.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Getting Started</span></a>
+  <a href="./getting-started.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Getting Started</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../overpass.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Overpass API Extension</span></a>
+  <a href="./overpass.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Overpass API Extension</span></a>
   </div>
 </li>
       </ul>
@@ -342,7 +378,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../api.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">API Reference</span></a>
+  <a href="./api.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">API Reference</span></a>
   </div>
 </li>
       </ul>
@@ -358,17 +394,17 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../resources/benchmarks.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Benchmarks</span></a>
+  <a href="./resources/benchmarks.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Benchmarks</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../resources/changelog.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Changelog</span></a>
+  <a href="./resources/changelog.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Changelog</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../resources/coverage.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Coverage</span></a>
+  <a href="./resources/coverage.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Coverage</span></a>
   </div>
 </li>
       </ul>
@@ -378,16 +414,30 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#quick-start" id="toc-quick-start" class="nav-link" data-scroll-target="#quick-start">Quick Start</a></li>
+  <li><a href="#default-features" id="toc-default-features" class="nav-link" data-scroll-target="#default-features">Default Features</a></li>
+  <li><a href="#custom-features" id="toc-custom-features" class="nav-link" data-scroll-target="#custom-features">Custom Features</a>
+  <ul class="collapse">
+  <li><a href="#overpassfeature-fields" id="toc-overpassfeature-fields" class="nav-link" data-scroll-target="#overpassfeature-fields"><code>OverpassFeature</code> Fields</a></li>
+  <li><a href="#keyword-constructor" id="toc-keyword-constructor" class="nav-link" data-scroll-target="#keyword-constructor">Keyword Constructor</a></li>
+  </ul></li>
+  <li><a href="#tips" id="toc-tips" class="nav-link" data-scroll-target="#tips">Tips</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../resources/benchmarks.html">Resources</a></li><li class="breadcrumb-item"><a href="../resources/coverage.html"><span class="chapter-title">Coverage</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Docs</a></li><li class="breadcrumb-item"><a href="./overpass.html"><span class="chapter-title">Overpass API Extension</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-title">Coverage</span></h1>
+<h1 class="title"><span class="chapter-title">Overpass API Extension</span></h1>
 </div>
 
 
@@ -404,22 +454,131 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<iframe id="coverage-iframe" src="coverage/index.html" width="100%" style="border:none; overflow:hidden;" scrolling="no">
-</iframe>
-<script>
-(function() {
-    var iframe = document.getElementById('coverage-iframe');
-    function resize() {
-        try {
-            iframe.style.height = iframe.contentDocument.documentElement.scrollHeight + 'px';
-        } catch(e) {}
-    }
-    iframe.addEventListener('load', resize);
-    window.addEventListener('resize', resize);
-})();
-</script>
+<p>The <strong>OverpassAPI extension</strong> adds toggle buttons to the map for fetching and displaying <a href="https://www.openstreetmap.org/">OpenStreetMap</a> features (roads, buildings, parks, etc.) via the <a href="https://overpass-api.de/">Overpass API</a>.</p>
+<section id="setup" class="level2">
+<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<p>The extension activates automatically when both <code>GeoExplorer</code> and <a href="https://github.com/RallypointOne/OverpassAPI.jl"><code>OverpassAPI</code></a> are loaded:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Pkg</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">Pkg</span>.<span class="fu">add</span>(url<span class="op">=</span><span class="st">"https://github.com/RallypointOne/OverpassAPI.jl"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">GeoExplorer</span>, <span class="bu">OverpassAPI</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="quick-start" class="level2">
+<h2 class="anchored" data-anchor-id="quick-start">Quick Start</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">GeoExplorer</span>, <span class="bu">OverpassAPI</span>, <span class="bu">Extents</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Launch map centered on Boulder, CO</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>app <span class="op">=</span> <span class="fu">explore</span>(extent<span class="op">=</span>Extents.<span class="fu">Extent</span>(X<span class="op">=</span>(<span class="op">-</span><span class="fl">105.30</span>, <span class="op">-</span><span class="fl">105.25</span>), Y<span class="op">=</span>(<span class="fl">40.00</span>, <span class="fl">40.03</span>)))</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Add Overpass controls with default features</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">add_overpass_controls!</span>(app)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This adds a panel of toggle buttons in the bottom-left corner of the map. Click a button to fetch and display that feature type for the visible map extent. Click again to hide it. Use <strong>Refresh</strong> to re-fetch active features after panning or zooming.</p>
+</section>
+<section id="default-features" class="level2">
+<h2 class="anchored" data-anchor-id="default-features">Default Features</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Button</th>
+<th>Query</th>
+<th>Plot Style</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Roads</td>
+<td><code>OQL.way["highway"]</code></td>
+<td>Gray lines</td>
+</tr>
+<tr class="even">
+<td>Buildings</td>
+<td><code>OQL.way["building"]</code></td>
+<td>Orange polygons</td>
+</tr>
+<tr class="odd">
+<td>Water</td>
+<td><code>OQL.way["natural" =&gt; "water"]</code></td>
+<td>Blue polygons</td>
+</tr>
+<tr class="even">
+<td>Parks</td>
+<td><code>OQL.way["leisure" =&gt; "park"]</code></td>
+<td>Green polygons</td>
+</tr>
+<tr class="odd">
+<td>Amenities</td>
+<td><code>OQL.node["amenity"]</code></td>
+<td>Red scatter</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="custom-features" class="level2">
+<h2 class="anchored" data-anchor-id="custom-features">Custom Features</h2>
+<p>Use <code>OverpassFeature</code> to define your own feature buttons:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">GeoExplorer</span>, <span class="bu">OverpassAPI</span>, <span class="bu">Extents</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">OverpassAPI</span>: OQL</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>app <span class="op">=</span> <span class="fu">explore</span>(extent<span class="op">=</span>Extents.<span class="fu">Extent</span>(X<span class="op">=</span>(<span class="op">-</span><span class="fl">105.30</span>, <span class="op">-</span><span class="fl">105.25</span>), Y<span class="op">=</span>(<span class="fl">40.00</span>, <span class="fl">40.03</span>)))</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">add_overpass_controls!</span>(app, features<span class="op">=</span>[</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">OverpassFeature</span>(<span class="st">"Roads"</span>,       OQL.way[<span class="st">"highway"</span>],                    <span class="op">:</span>gray50,     <span class="op">:</span>lines),</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">OverpassFeature</span>(<span class="st">"Buildings"</span>,   OQL.way[<span class="st">"building"</span>],                   <span class="op">:</span>orange,     <span class="op">:</span>poly),</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">OverpassFeature</span>(<span class="st">"Restaurants"</span>, OQL.node[<span class="st">"amenity"</span> <span class="op">=&gt;</span> <span class="st">"restaurant"</span>],   <span class="op">:</span>red,        <span class="op">:</span>scatter),</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">OverpassFeature</span>(<span class="st">"Schools"</span>,     OQL.node[<span class="st">"amenity"</span> <span class="op">=&gt;</span> <span class="st">"school"</span>],       <span class="op">:</span>purple,     <span class="op">:</span>scatter),</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="overpassfeature-fields" class="level3">
+<h3 class="anchored" data-anchor-id="overpassfeature-fields"><code>OverpassFeature</code> Fields</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>name</code></td>
+<td><code>String</code></td>
+<td>Label for the toggle button</td>
+</tr>
+<tr class="even">
+<td><code>query</code></td>
+<td><code>Any</code></td>
+<td>An <code>OQL</code> query expression</td>
+</tr>
+<tr class="odd">
+<td><code>color</code></td>
+<td><code>Any</code></td>
+<td>Any valid Makie color</td>
+</tr>
+<tr class="even">
+<td><code>plot_type</code></td>
+<td><code>Symbol</code></td>
+<td><code>:lines</code>, <code>:poly</code>, or <code>:scatter</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="keyword-constructor" class="level3">
+<h3 class="anchored" data-anchor-id="keyword-constructor">Keyword Constructor</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Positional</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">OverpassFeature</span>(<span class="st">"Roads"</span>, OQL.way[<span class="st">"highway"</span>], <span class="op">:</span>gray, <span class="op">:</span>lines)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Keyword (color and plot_type have defaults)</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">OverpassFeature</span>(<span class="st">"Roads"</span>, OQL.way[<span class="st">"highway"</span>]; color<span class="op">=:</span>gray, plot_type<span class="op">=:</span>lines)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</section>
+<section id="tips" class="level2">
+<h2 class="anchored" data-anchor-id="tips">Tips</h2>
+<ul>
+<li><strong>Zoom in</strong> before fetching — large extents can return a lot of data and slow down the Overpass API.</li>
+<li>Use <strong>Refresh</strong> after panning/zooming to update active layers for the new view.</li>
+<li>The <code>:poly</code> plot type works best for closed ways (buildings, parks, water bodies). Use <code>:lines</code> for open ways (roads, paths).</li>
+</ul>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -837,11 +996,14 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../resources/changelog.html" class="pagination-link" aria-label="Changelog">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Changelog</span></span>
+      <a href="./getting-started.html" class="pagination-link" aria-label="Getting Started">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Getting Started</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="./api.html" class="pagination-link" aria-label="API Reference">
+        <span class="nav-page-text"><span class="chapter-title">API Reference</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->
