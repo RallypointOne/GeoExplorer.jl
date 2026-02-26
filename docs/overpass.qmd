@@ -1,5 +1,6 @@
 ---
 title: "Overpass API Extension"
+engine: julia
 ---
 
 The **OverpassAPI extension** adds toggle buttons to the map for fetching and displaying [OpenStreetMap](https://www.openstreetmap.org/) features (roads, buildings, parks, etc.) via the [Overpass API](https://overpass-api.de/).
@@ -30,6 +31,25 @@ add_overpass_controls!(app)
 ```
 
 This adds a panel of toggle buttons in the bottom-left corner of the map. Click a button to fetch and display that feature type for the visible map extent. Click again to hide it. Use **Refresh** to re-fetch active features after panning or zooming.
+
+```{julia}
+#| output: false
+using GeoExplorer, OverpassAPI, GLMakie, Extents
+
+fig = Figure(size=(800, 600))
+app = explore(extent=Extents.Extent(X=(-105.285, -105.26), Y=(40.005, 40.025)), figure=fig)
+controls = add_overpass_controls!(app)
+
+# Programmatically activate Roads, Buildings, and Parks
+for name in ["Roads", "Buildings", "Parks"]
+    controls.buttons[name].clicks[] = 1
+end
+
+wait(app.map)
+save("overpass_controls.png", fig)
+```
+
+![Overpass controls showing roads, buildings, and parks in Boulder, CO](overpass_controls.png)
 
 ## Default Features
 
