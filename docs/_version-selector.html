@@ -81,6 +81,12 @@
         .catch(function() { return []; })
         .then(buildDropdown);
 
+    // Fix navbar-brand title link to point to docs home (logo stays external)
+    var titleLink = document.querySelector('a.navbar-brand:not(.navbar-brand-logo)');
+    if (titleLink) {
+        titleLink.href = basePath + currentVersion + '/';
+    }
+
     // Fetch star count from GitHub API
     var starLink = document.querySelector('a.nav-link[href*="/stargazers"]');
     if (starLink) {
