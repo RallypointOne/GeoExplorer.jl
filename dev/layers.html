@@ -8,7 +8,7 @@
 
 <meta name="description" content="Interactive geospatial exploration in Julia">
 
-<title>Overpass API Extension – GeoExplorer.jl</title>
+<title>Layer Management – GeoExplorer.jl</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -66,8 +66,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./api.html" rel="next">
-<link href="./layers.html" rel="prev">
+<link href="./overpass.html" rel="next">
+<link href="./getting-started.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -149,7 +149,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Docs</a></li><li class="breadcrumb-item"><a href="./overpass.html"><span class="chapter-title">Overpass API Extension</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Docs</a></li><li class="breadcrumb-item"><a href="./layers.html"><span class="chapter-title">Layer Management</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -190,12 +190,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./layers.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Layer Management</span></a>
+  <a href="./layers.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Layer Management</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./overpass.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Overpass API Extension</span></a>
+  <a href="./overpass.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Overpass API Extension</span></a>
   </div>
 </li>
       </ul>
@@ -252,24 +252,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
-  <li><a href="#quick-start" id="toc-quick-start" class="nav-link" data-scroll-target="#quick-start">Quick Start</a></li>
-  <li><a href="#default-features" id="toc-default-features" class="nav-link" data-scroll-target="#default-features">Default Features</a></li>
-  <li><a href="#custom-features" id="toc-custom-features" class="nav-link" data-scroll-target="#custom-features">Custom Features</a>
-  <ul class="collapse">
-  <li><a href="#overpassfeature-fields" id="toc-overpassfeature-fields" class="nav-link" data-scroll-target="#overpassfeature-fields"><code>OverpassFeature</code> Fields</a></li>
-  <li><a href="#keyword-constructor" id="toc-keyword-constructor" class="nav-link" data-scroll-target="#keyword-constructor">Keyword Constructor</a></li>
-  </ul></li>
-  <li><a href="#tips" id="toc-tips" class="nav-link" data-scroll-target="#tips">Tips</a></li>
+  <li><a href="#adding-layers" id="toc-adding-layers" class="nav-link active" data-scroll-target="#adding-layers">Adding Layers</a></li>
+  <li><a href="#the-layers-panel" id="toc-the-layers-panel" class="nav-link" data-scroll-target="#the-layers-panel">The Layers Panel</a></li>
+  <li><a href="#programmatic-layer-control" id="toc-programmatic-layer-control" class="nav-link" data-scroll-target="#programmatic-layer-control">Programmatic Layer Control</a></li>
+  <li><a href="#the-layer-struct" id="toc-the-layer-struct" class="nav-link" data-scroll-target="#the-layer-struct">The <code>Layer</code> Struct</a></li>
+  <li><a href="#layer-functions" id="toc-layer-functions" class="nav-link" data-scroll-target="#layer-functions">Layer Functions</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Docs</a></li><li class="breadcrumb-item"><a href="./overpass.html"><span class="chapter-title">Overpass API Extension</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Docs</a></li><li class="breadcrumb-item"><a href="./layers.html"><span class="chapter-title">Layer Management</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-title">Overpass API Extension</span></h1>
+<h1 class="title"><span class="chapter-title">Layer Management</span></h1>
 </div>
 
 
@@ -286,101 +282,111 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>The <strong>OverpassAPI extension</strong> adds toggle buttons to the map for fetching and displaying <a href="https://www.openstreetmap.org/">OpenStreetMap</a> features (roads, buildings, parks, etc.) via the <a href="https://overpass-api.de/">Overpass API</a>.</p>
-<section id="setup" class="level2">
-<h2 class="anchored" data-anchor-id="setup">Setup</h2>
-<p>The extension activates automatically when both <code>GeoExplorer</code> and <a href="https://github.com/RallypointOne/OverpassAPI.jl"><code>OverpassAPI</code></a> are loaded:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Pkg</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">Pkg</span>.<span class="fu">add</span>(url<span class="op">=</span><span class="st">"https://github.com/RallypointOne/OverpassAPI.jl"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">GeoExplorer</span>, <span class="bu">OverpassAPI</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="quick-start" class="level2">
-<h2 class="anchored" data-anchor-id="quick-start">Quick Start</h2>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">GeoExplorer</span>, <span class="bu">OverpassAPI</span>, <span class="bu">Extents</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Launch map centered on Boulder, CO</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>app <span class="op">=</span> <span class="fu">explore</span>(extent<span class="op">=</span>Extents.<span class="fu">Extent</span>(X<span class="op">=</span>(<span class="op">-</span><span class="fl">105.30</span>, <span class="op">-</span><span class="fl">105.25</span>), Y<span class="op">=</span>(<span class="fl">40.00</span>, <span class="fl">40.03</span>)))</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Add Overpass controls with default features</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">add_overpass_controls!</span>(app)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>This adds a panel of toggle buttons in the bottom-left corner of the map. Click a button to fetch and display that feature type for the visible map extent. Click again to hide it. Use <strong>Refresh</strong> to re-fetch active features after panning or zooming.</p>
+<p>Layers let you manage multiple data overlays on the map. Each layer wraps a Makie plot object with a name and visibility toggle, and integrates with the built-in layers panel (☰) in the UI.</p>
+<section id="adding-layers" class="level2">
+<h2 class="anchored" data-anchor-id="adding-layers">Adding Layers</h2>
+<p>Use <code>plot_geometry!</code> or any Makie plotting function on <code>app.map_axis</code>, then register it as a layer with <code>add_layer!</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">GeoExplorer</span>, <span class="bu">GeoJSON</span>, <span class="bu">GLMakie</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>app <span class="op">=</span> <span class="fu">explore</span>()</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot data and register as a layer</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>geom <span class="op">=</span> GeoJSON.<span class="fu">read</span>(<span class="st">"boundaries.geojson"</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>plt <span class="op">=</span> <span class="fu">plot_geometry!</span>(app, geom)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">add_layer!</span>(app, <span class="st">"Boundaries"</span>, plt)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Or use Makie directly (coordinates in Web Mercator)</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>scatter_plt <span class="op">=</span> <span class="fu">scatter!</span>(app.map_axis, xs, ys; color<span class="op">=:</span>red, markersize<span class="op">=</span><span class="fl">8</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">add_layer!</span>(app, <span class="st">"My Points"</span>, scatter_plt)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div id="2" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">GeoExplorer</span>, <span class="bu">OverpassAPI</span>, <span class="bu">GLMakie</span>, <span class="bu">Extents</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> <span class="fu">Figure</span>(size<span class="op">=</span>(<span class="fl">800</span>, <span class="fl">600</span>))</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>app <span class="op">=</span> <span class="fu">explore</span>(extent<span class="op">=</span>Extents.<span class="fu">Extent</span>(X<span class="op">=</span>(<span class="op">-</span><span class="fl">105.285</span>, <span class="op">-</span><span class="fl">105.26</span>), Y<span class="op">=</span>(<span class="fl">40.005</span>, <span class="fl">40.025</span>)), figure<span class="op">=</span>fig)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>controls <span class="op">=</span> <span class="fu">add_overpass_controls!</span>(app)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Programmatically activate Roads, Buildings, and Parks</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name <span class="kw">in</span> [<span class="st">"Roads"</span>, <span class="st">"Buildings"</span>, <span class="st">"Parks"</span>]</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    controls.buttons[name].clicks[] <span class="op">=</span> <span class="fl">1</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="fu">wait</span>(app.map)</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(<span class="st">"overpass_controls.png"</span>, fig)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">GeoExplorer</span>, <span class="bu">GeoJSON</span>, <span class="bu">GLMakie</span>, <span class="bu">Extents</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> <span class="fu">Figure</span>(size<span class="op">=</span>(<span class="fl">800</span>, <span class="fl">600</span>))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>app <span class="op">=</span> <span class="fu">explore</span>(extent<span class="op">=</span>Extents.<span class="fu">Extent</span>(X<span class="op">=</span>(<span class="op">-</span><span class="fl">105.30</span>, <span class="op">-</span><span class="fl">105.24</span>), Y<span class="op">=</span>(<span class="fl">39.98</span>, <span class="fl">40.03</span>)), figure<span class="op">=</span>fig)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a polygon layer</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>polygon <span class="op">=</span> GeoJSON.<span class="fu">read</span>(<span class="st">"""</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="st">{</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="st">  "type": "Polygon",</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="st">  "coordinates": [[</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="st">    [-105.29, 40.02],</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="st">    [-105.27, 40.02],</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="st">    [-105.27, 40.00],</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="st">    [-105.29, 40.00],</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="st">    [-105.29, 40.02]</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="st">  ]]</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>plt1 <span class="op">=</span> <span class="fu">plot_geometry!</span>(app, polygon; color<span class="op">=</span>(<span class="op">:</span>dodgerblue, <span class="fl">0.3</span>), strokecolor<span class="op">=:</span>dodgerblue, strokewidth<span class="op">=</span><span class="fl">2</span>)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="fu">add_layer!</span>(app, <span class="st">"Zone A"</span>, plt1)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a scatter layer</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>points <span class="op">=</span> GeoJSON.<span class="fu">read</span>(<span class="st">"""</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="st">{</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="st">  "type": "MultiPoint",</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="st">  "coordinates": [</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="st">    [-105.275, 40.015],</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="st">    [-105.265, 40.005],</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="st">    [-105.255, 40.020],</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="st">    [-105.285, 40.010],</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="st">    [-105.260, 40.012]</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="st">  ]</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>plt2 <span class="op">=</span> <span class="fu">plot_geometry!</span>(app, points; color<span class="op">=:</span>red, markersize<span class="op">=</span><span class="fl">12</span>)</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="fu">add_layer!</span>(app, <span class="st">"Stations"</span>, plt2)</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a line layer</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>route <span class="op">=</span> GeoJSON.<span class="fu">read</span>(<span class="st">"""</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="st">{</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="st">  "type": "LineString",</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="st">  "coordinates": [</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="st">    [-105.29, 39.99],</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="st">    [-105.27, 40.01],</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="st">    [-105.25, 40.005],</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a><span class="st">    [-105.24, 40.02]</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a><span class="st">  ]</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>plt3 <span class="op">=</span> <span class="fu">plot_geometry!</span>(app, route; color<span class="op">=:</span>green, linewidth<span class="op">=</span><span class="fl">3</span>)</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a><span class="fu">add_layer!</span>(app, <span class="st">"Route"</span>, plt3)</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a><span class="fu">wait</span>(app.map)</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(<span class="st">"layers_example.png"</span>, fig)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="overpass_controls.png" class="img-fluid figure-img"></p>
-<figcaption>Overpass controls showing roads, buildings, and parks in Boulder, CO</figcaption>
+<p><img src="layers_example.png" class="img-fluid figure-img"></p>
+<figcaption>Map with polygon, scatter, and line layers in Boulder, CO</figcaption>
 </figure>
 </div>
 </section>
-<section id="default-features" class="level2">
-<h2 class="anchored" data-anchor-id="default-features">Default Features</h2>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Button</th>
-<th>Query</th>
-<th>Plot Style</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Roads</td>
-<td><code>OQL.way["highway"]</code></td>
-<td>Gray lines</td>
-</tr>
-<tr class="even">
-<td>Buildings</td>
-<td><code>OQL.way["building"]</code></td>
-<td>Orange polygons</td>
-</tr>
-<tr class="odd">
-<td>Water</td>
-<td><code>OQL.way["natural" =&gt; "water"]</code></td>
-<td>Blue polygons</td>
-</tr>
-<tr class="even">
-<td>Parks</td>
-<td><code>OQL.way["leisure" =&gt; "park"]</code></td>
-<td>Green polygons</td>
-</tr>
-<tr class="odd">
-<td>Amenities</td>
-<td><code>OQL.node["amenity"]</code></td>
-<td>Red scatter</td>
-</tr>
-</tbody>
-</table>
+<section id="the-layers-panel" class="level2">
+<h2 class="anchored" data-anchor-id="the-layers-panel">The Layers Panel</h2>
+<p>Click the <strong>☰</strong> button in the top-right corner to open the layers panel. From there you can:</p>
+<ul>
+<li><strong>Toggle visibility</strong> with the checkbox next to each layer name</li>
+<li><strong>Zoom to a layer’s extent</strong> with the zoom button (⌖)</li>
+</ul>
 </section>
-<section id="custom-features" class="level2">
-<h2 class="anchored" data-anchor-id="custom-features">Custom Features</h2>
-<p>Use <code>OverpassFeature</code> to define your own feature buttons:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">GeoExplorer</span>, <span class="bu">OverpassAPI</span>, <span class="bu">Extents</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">OverpassAPI</span>: OQL</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>app <span class="op">=</span> <span class="fu">explore</span>(extent<span class="op">=</span>Extents.<span class="fu">Extent</span>(X<span class="op">=</span>(<span class="op">-</span><span class="fl">105.30</span>, <span class="op">-</span><span class="fl">105.25</span>), Y<span class="op">=</span>(<span class="fl">40.00</span>, <span class="fl">40.03</span>)))</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">add_overpass_controls!</span>(app, features<span class="op">=</span>[</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">OverpassFeature</span>(<span class="st">"Roads"</span>,       OQL.way[<span class="st">"highway"</span>],                    <span class="op">:</span>gray50,     <span class="op">:</span>lines),</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">OverpassFeature</span>(<span class="st">"Buildings"</span>,   OQL.way[<span class="st">"building"</span>],                   <span class="op">:</span>orange,     <span class="op">:</span>poly),</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">OverpassFeature</span>(<span class="st">"Restaurants"</span>, OQL.node[<span class="st">"amenity"</span> <span class="op">=&gt;</span> <span class="st">"restaurant"</span>],   <span class="op">:</span>red,        <span class="op">:</span>scatter),</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">OverpassFeature</span>(<span class="st">"Schools"</span>,     OQL.node[<span class="st">"amenity"</span> <span class="op">=&gt;</span> <span class="st">"school"</span>],       <span class="op">:</span>purple,     <span class="op">:</span>scatter),</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<section id="overpassfeature-fields" class="level3">
-<h3 class="anchored" data-anchor-id="overpassfeature-fields"><code>OverpassFeature</code> Fields</h3>
+<section id="programmatic-layer-control" class="level2">
+<h2 class="anchored" data-anchor-id="programmatic-layer-control">Programmatic Layer Control</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Toggle visibility on/off</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">toggle_layer!</span>(app, <span class="st">"Stations"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Get a layer by name</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>layer <span class="op">=</span> <span class="fu">get_layer</span>(app, <span class="st">"Stations"</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>layer.visible[]  <span class="co"># true or false</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Zoom the map to fit a layer's extent</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">zoom_to_layer!</span>(app, <span class="st">"Zone A"</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="fu">zoom_to_layer!</span>(app, <span class="st">"Zone A"</span>, padding<span class="op">=</span><span class="fl">0.2</span>)  <span class="co"># 20% padding</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove a layer (deletes the plot from the map)</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="fu">remove_layer!</span>(app, <span class="st">"Route"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="the-layer-struct" class="level2">
+<h2 class="anchored" data-anchor-id="the-layer-struct">The <code>Layer</code> Struct</h2>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -393,42 +399,57 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td><code>name</code></td>
 <td><code>String</code></td>
-<td>Label for the toggle button</td>
+<td>Display name shown in the layers panel</td>
 </tr>
 <tr class="even">
-<td><code>query</code></td>
+<td><code>plot</code></td>
 <td><code>Any</code></td>
-<td>An <code>OQL</code> query expression</td>
+<td>Reference to the Makie plot object</td>
 </tr>
 <tr class="odd">
-<td><code>color</code></td>
-<td><code>Any</code></td>
-<td>Any valid Makie color</td>
-</tr>
-<tr class="even">
-<td><code>plot_type</code></td>
-<td><code>Symbol</code></td>
-<td><code>:lines</code>, <code>:poly</code>, or <code>:scatter</code></td>
+<td><code>visible</code></td>
+<td><code>Observable{Bool}</code></td>
+<td>Reactive visibility state</td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="keyword-constructor" class="level3">
-<h3 class="anchored" data-anchor-id="keyword-constructor">Keyword Constructor</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Positional</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">OverpassFeature</span>(<span class="st">"Roads"</span>, OQL.way[<span class="st">"highway"</span>], <span class="op">:</span>gray, <span class="op">:</span>lines)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Keyword (color and plot_type have defaults)</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">OverpassFeature</span>(<span class="st">"Roads"</span>, OQL.way[<span class="st">"highway"</span>]; color<span class="op">=:</span>gray, plot_type<span class="op">=:</span>lines)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-</section>
-<section id="tips" class="level2">
-<h2 class="anchored" data-anchor-id="tips">Tips</h2>
-<ul>
-<li><strong>Zoom in</strong> before fetching — large extents can return a lot of data and slow down the Overpass API.</li>
-<li>Use <strong>Refresh</strong> after panning/zooming to update active layers for the new view.</li>
-<li>The <code>:poly</code> plot type works best for closed ways (buildings, parks, water bodies). Use <code>:lines</code> for open ways (roads, paths).</li>
-</ul>
+<section id="layer-functions" class="level2">
+<h2 class="anchored" data-anchor-id="layer-functions">Layer Functions</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 43%">
+<col style="width: 56%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>add_layer!(app, name, plot)</code></td>
+<td>Register a plot as a named layer</td>
+</tr>
+<tr class="even">
+<td><code>remove_layer!(app, name)</code></td>
+<td>Remove a layer and delete its plot</td>
+</tr>
+<tr class="odd">
+<td><code>toggle_layer!(app, name)</code></td>
+<td>Toggle a layer’s visibility</td>
+</tr>
+<tr class="even">
+<td><code>get_layer(app, name)</code></td>
+<td>Get a <code>Layer</code> by name (or <code>nothing</code>)</td>
+</tr>
+<tr class="odd">
+<td><code>zoom_to_layer!(app, name; padding=0.1)</code></td>
+<td>Zoom the map to fit a layer’s extent</td>
+</tr>
+</tbody>
+</table>
 
 
 </section>
@@ -836,13 +857,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./layers.html" class="pagination-link" aria-label="Layer Management">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Layer Management</span></span>
+      <a href="./getting-started.html" class="pagination-link" aria-label="Getting Started">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Getting Started</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./api.html" class="pagination-link" aria-label="API Reference">
-        <span class="nav-page-text"><span class="chapter-title">API Reference</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./overpass.html" class="pagination-link" aria-label="Overpass API Extension">
+        <span class="nav-page-text"><span class="chapter-title">Overpass API Extension</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

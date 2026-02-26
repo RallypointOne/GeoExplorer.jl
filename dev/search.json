@@ -121,6 +121,72 @@
     ]
   },
   {
+    "objectID": "layers.html",
+    "href": "layers.html",
+    "title": "Layer Management",
+    "section": "",
+    "text": "Adding Layers\nLayers let you manage multiple data overlays on the map. Each layer wraps a Makie plot object with a name and visibility toggle, and integrates with the built-in layers panel (☰) in the UI.\nUse plot_geometry! or any Makie plotting function on app.map_axis, then register it as a layer with add_layer!:\nusing GeoExplorer, GeoJSON, GLMakie, Extents\n\nfig = Figure(size=(800, 600))\napp = explore(extent=Extents.Extent(X=(-105.30, -105.24), Y=(39.98, 40.03)), figure=fig)\n\n# Add a polygon layer\npolygon = GeoJSON.read(\"\"\"\n{\n  \"type\": \"Polygon\",\n  \"coordinates\": [[\n    [-105.29, 40.02],\n    [-105.27, 40.02],\n    [-105.27, 40.00],\n    [-105.29, 40.00],\n    [-105.29, 40.02]\n  ]]\n}\n\"\"\")\nplt1 = plot_geometry!(app, polygon; color=(:dodgerblue, 0.3), strokecolor=:dodgerblue, strokewidth=2)\nadd_layer!(app, \"Zone A\", plt1)\n\n# Add a scatter layer\npoints = GeoJSON.read(\"\"\"\n{\n  \"type\": \"MultiPoint\",\n  \"coordinates\": [\n    [-105.275, 40.015],\n    [-105.265, 40.005],\n    [-105.255, 40.020],\n    [-105.285, 40.010],\n    [-105.260, 40.012]\n  ]\n}\n\"\"\")\nplt2 = plot_geometry!(app, points; color=:red, markersize=12)\nadd_layer!(app, \"Stations\", plt2)\n\n# Add a line layer\nroute = GeoJSON.read(\"\"\"\n{\n  \"type\": \"LineString\",\n  \"coordinates\": [\n    [-105.29, 39.99],\n    [-105.27, 40.01],\n    [-105.25, 40.005],\n    [-105.24, 40.02]\n  ]\n}\n\"\"\")\nplt3 = plot_geometry!(app, route; color=:green, linewidth=3)\nadd_layer!(app, \"Route\", plt3)\n\nwait(app.map)\nsave(\"layers_example.png\", fig)",
+    "crumbs": [
+      "Docs",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Layer Management</span>"
+    ]
+  },
+  {
+    "objectID": "layers.html#adding-layers",
+    "href": "layers.html#adding-layers",
+    "title": "Layer Management",
+    "section": "",
+    "text": "using GeoExplorer, GeoJSON, GLMakie\n\napp = explore()\n\n# Plot data and register as a layer\ngeom = GeoJSON.read(\"boundaries.geojson\")\nplt = plot_geometry!(app, geom)\nadd_layer!(app, \"Boundaries\", plt)\n\n# Or use Makie directly (coordinates in Web Mercator)\nscatter_plt = scatter!(app.map_axis, xs, ys; color=:red, markersize=8)\nadd_layer!(app, \"My Points\", scatter_plt)\n\n\n\n\nMap with polygon, scatter, and line layers in Boulder, CO",
+    "crumbs": [
+      "Docs",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Layer Management</span>"
+    ]
+  },
+  {
+    "objectID": "layers.html#the-layers-panel",
+    "href": "layers.html#the-layers-panel",
+    "title": "Layer Management",
+    "section": "The Layers Panel",
+    "text": "The Layers Panel\nClick the ☰ button in the top-right corner to open the layers panel. From there you can:\n\nToggle visibility with the checkbox next to each layer name\nZoom to a layer’s extent with the zoom button (⌖)",
+    "crumbs": [
+      "Docs",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Layer Management</span>"
+    ]
+  },
+  {
+    "objectID": "layers.html#programmatic-layer-control",
+    "href": "layers.html#programmatic-layer-control",
+    "title": "Layer Management",
+    "section": "Programmatic Layer Control",
+    "text": "Programmatic Layer Control\n# Toggle visibility on/off\ntoggle_layer!(app, \"Stations\")\n\n# Get a layer by name\nlayer = get_layer(app, \"Stations\")\nlayer.visible[]  # true or false\n\n# Zoom the map to fit a layer's extent\nzoom_to_layer!(app, \"Zone A\")\nzoom_to_layer!(app, \"Zone A\", padding=0.2)  # 20% padding\n\n# Remove a layer (deletes the plot from the map)\nremove_layer!(app, \"Route\")",
+    "crumbs": [
+      "Docs",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Layer Management</span>"
+    ]
+  },
+  {
+    "objectID": "layers.html#the-layer-struct",
+    "href": "layers.html#the-layer-struct",
+    "title": "Layer Management",
+    "section": "The Layer Struct",
+    "text": "The Layer Struct\n\n\n\nField\nType\nDescription\n\n\n\n\nname\nString\nDisplay name shown in the layers panel\n\n\nplot\nAny\nReference to the Makie plot object\n\n\nvisible\nObservable{Bool}\nReactive visibility state",
+    "crumbs": [
+      "Docs",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Layer Management</span>"
+    ]
+  },
+  {
+    "objectID": "layers.html#layer-functions",
+    "href": "layers.html#layer-functions",
+    "title": "Layer Management",
+    "section": "Layer Functions",
+    "text": "Layer Functions\n\n\n\n\n\n\n\nFunction\nDescription\n\n\n\n\nadd_layer!(app, name, plot)\nRegister a plot as a named layer\n\n\nremove_layer!(app, name)\nRemove a layer and delete its plot\n\n\ntoggle_layer!(app, name)\nToggle a layer’s visibility\n\n\nget_layer(app, name)\nGet a Layer by name (or nothing)\n\n\nzoom_to_layer!(app, name; padding=0.1)\nZoom the map to fit a layer’s extent",
+    "crumbs": [
+      "Docs",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Layer Management</span>"
+    ]
+  },
+  {
     "objectID": "overpass.html",
     "href": "overpass.html",
     "title": "Overpass API Extension",
@@ -128,7 +194,7 @@
     "text": "Setup\nThe OverpassAPI extension adds toggle buttons to the map for fetching and displaying OpenStreetMap features (roads, buildings, parks, etc.) via the Overpass API.\nThe extension activates automatically when both GeoExplorer and OverpassAPI are loaded:",
     "crumbs": [
       "Docs",
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Overpass API Extension</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Overpass API Extension</span>"
     ]
   },
   {
@@ -139,7 +205,7 @@
     "text": "using Pkg\nPkg.add(url=\"https://github.com/RallypointOne/OverpassAPI.jl\")\nusing GeoExplorer, OverpassAPI",
     "crumbs": [
       "Docs",
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Overpass API Extension</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Overpass API Extension</span>"
     ]
   },
   {
@@ -147,10 +213,10 @@
     "href": "overpass.html#quick-start",
     "title": "Overpass API Extension",
     "section": "Quick Start",
-    "text": "Quick Start\nusing GeoExplorer, OverpassAPI, Extents\n\n# Launch map centered on Boulder, CO\napp = explore(extent=Extents.Extent(X=(-105.30, -105.25), Y=(40.00, 40.03)))\n\n# Add Overpass controls with default features\nadd_overpass_controls!(app)\nThis adds a panel of toggle buttons in the bottom-left corner of the map. Click a button to fetch and display that feature type for the visible map extent. Click again to hide it. Use Refresh to re-fetch active features after panning or zooming.",
+    "text": "Quick Start\nusing GeoExplorer, OverpassAPI, Extents\n\n# Launch map centered on Boulder, CO\napp = explore(extent=Extents.Extent(X=(-105.30, -105.25), Y=(40.00, 40.03)))\n\n# Add Overpass controls with default features\nadd_overpass_controls!(app)\nThis adds a panel of toggle buttons in the bottom-left corner of the map. Click a button to fetch and display that feature type for the visible map extent. Click again to hide it. Use Refresh to re-fetch active features after panning or zooming.\n\nusing GeoExplorer, OverpassAPI, GLMakie, Extents\n\nfig = Figure(size=(800, 600))\napp = explore(extent=Extents.Extent(X=(-105.285, -105.26), Y=(40.005, 40.025)), figure=fig)\ncontrols = add_overpass_controls!(app)\n\n# Programmatically activate Roads, Buildings, and Parks\nfor name in [\"Roads\", \"Buildings\", \"Parks\"]\n    controls.buttons[name].clicks[] = 1\nend\n\nwait(app.map)\nsave(\"overpass_controls.png\", fig)\n\n\n\n\nOverpass controls showing roads, buildings, and parks in Boulder, CO",
     "crumbs": [
       "Docs",
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Overpass API Extension</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Overpass API Extension</span>"
     ]
   },
   {
@@ -161,7 +227,7 @@
     "text": "Default Features\n\n\n\nButton\nQuery\nPlot Style\n\n\n\n\nRoads\nOQL.way[\"highway\"]\nGray lines\n\n\nBuildings\nOQL.way[\"building\"]\nOrange polygons\n\n\nWater\nOQL.way[\"natural\" =&gt; \"water\"]\nBlue polygons\n\n\nParks\nOQL.way[\"leisure\" =&gt; \"park\"]\nGreen polygons\n\n\nAmenities\nOQL.node[\"amenity\"]\nRed scatter",
     "crumbs": [
       "Docs",
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Overpass API Extension</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Overpass API Extension</span>"
     ]
   },
   {
@@ -172,7 +238,7 @@
     "text": "Custom Features\nUse OverpassFeature to define your own feature buttons:\nusing GeoExplorer, OverpassAPI, Extents\nusing OverpassAPI: OQL\n\napp = explore(extent=Extents.Extent(X=(-105.30, -105.25), Y=(40.00, 40.03)))\n\nadd_overpass_controls!(app, features=[\n    OverpassFeature(\"Roads\",       OQL.way[\"highway\"],                    :gray50,     :lines),\n    OverpassFeature(\"Buildings\",   OQL.way[\"building\"],                   :orange,     :poly),\n    OverpassFeature(\"Restaurants\", OQL.node[\"amenity\" =&gt; \"restaurant\"],   :red,        :scatter),\n    OverpassFeature(\"Schools\",     OQL.node[\"amenity\" =&gt; \"school\"],       :purple,     :scatter),\n])\n\nOverpassFeature Fields\n\n\n\nField\nType\nDescription\n\n\n\n\nname\nString\nLabel for the toggle button\n\n\nquery\nAny\nAn OQL query expression\n\n\ncolor\nAny\nAny valid Makie color\n\n\nplot_type\nSymbol\n:lines, :poly, or :scatter\n\n\n\n\n\nKeyword Constructor\n# Positional\nOverpassFeature(\"Roads\", OQL.way[\"highway\"], :gray, :lines)\n\n# Keyword (color and plot_type have defaults)\nOverpassFeature(\"Roads\", OQL.way[\"highway\"]; color=:gray, plot_type=:lines)",
     "crumbs": [
       "Docs",
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Overpass API Extension</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Overpass API Extension</span>"
     ]
   },
   {
@@ -183,7 +249,7 @@
     "text": "Tips\n\nZoom in before fetching — large extents can return a lot of data and slow down the Overpass API.\nUse Refresh after panning/zooming to update active layers for the new view.\nThe :poly plot type works best for closed ways (buildings, parks, water bodies). Use :lines for open ways (roads, paths).",
     "crumbs": [
       "Docs",
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Overpass API Extension</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Overpass API Extension</span>"
     ]
   },
   {
@@ -194,7 +260,7 @@
     "text": "Main Functions",
     "crumbs": [
       "API",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>API Reference</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>API Reference</span>"
     ]
   },
   {
@@ -205,7 +271,7 @@
     "text": "explore\nexplore(; extent, provider, figure)\nexplore(geometry; padding=0.1, kw...)\nLaunch the GeoExplorer application.\nKeyword Arguments:\n\nextent: Initial map extent (default: Continental US)\nprovider: Tile provider for basemap (default: OpenStreetMap)\nfigure: Makie Figure to use (default: creates new 1200x800 figure)\n\nWith Geometry:\n\ngeometry: Any GeoInterface-compatible geometry\npadding: Fractional padding around geometry extent (default: 0.1)\n\nReturns: GeoExplorerApp instance\nExamples:\n# Default view\napp = explore()\n\n# Custom extent\napp = explore(extent=Extents.Extent(X=(-74.1, -73.9), Y=(40.7, 40.8)))\n\n# With tile provider\napp = explore(provider=TileProviders.Esri(:WorldImagery))\n\n# With geometry\ngeom = GeoJSON.read(\"data.geojson\")\napp = explore(geom)\n\n\n\nplot_geometry!\nplot_geometry!(app::GeoExplorerApp, geometry; kw...)\nPlot a GeoInterface-compatible geometry on the map.\nArguments:\n\napp: The GeoExplorerApp instance\ngeometry: Any GeoInterface-compatible geometry\n\nKeyword Arguments (vary by geometry type):\n\n\n\n\n\n\n\nGeometry\nKeywords\n\n\n\n\nPoint/MultiPoint\ncolor=:red, markersize=10\n\n\nLineString/MultiLineString\ncolor=:blue, linewidth=2\n\n\nPolygon/MultiPolygon\ncolor=(:blue, 0.3), strokecolor=:blue, strokewidth=2\n\n\n\nExamples:\napp = explore()\n\n# Plot with defaults\nplot_geometry!(app, geom)\n\n# Customize appearance\nplot_geometry!(app, polygon, color=(:green, 0.5), strokecolor=:darkgreen)\nplot_geometry!(app, line, color=:red, linewidth=3)\nplot_geometry!(app, points, color=:orange, markersize=15)",
     "crumbs": [
       "API",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>API Reference</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>API Reference</span>"
     ]
   },
   {
@@ -216,7 +282,7 @@
     "text": "Navigation Functions\n\ngoto!\ngoto!(app::GeoExplorerApp, lon, lat; zoom=10)\nNavigate to a specific longitude/latitude location.\nArguments:\n\napp: The GeoExplorerApp instance\nlon: Longitude in degrees\nlat: Latitude in degrees\nzoom: Zoom level (default: 10)\n\nExample:\ngoto!(app, -122.4194, 37.7749, zoom=12)  # San Francisco\n\n\n\nzoom!\nzoom!(app::GeoExplorerApp, factor)\nZoom the map by a factor.\nArguments:\n\napp: The GeoExplorerApp instance\nfactor: Zoom factor (&lt; 1 zooms in, &gt; 1 zooms out)\n\nExamples:\nzoom!(app, 0.5)  # Zoom in 2x\nzoom!(app, 2.0)  # Zoom out 2x\n\n\n\nreset_view!\nreset_view!(app::GeoExplorerApp)\nReset the map view to the original extent.\n\n\n\nset_center!\nset_center!(app::GeoExplorerApp, center)\nSet the map center to given coordinates (in Web Mercator).",
     "crumbs": [
       "API",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>API Reference</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>API Reference</span>"
     ]
   },
   {
@@ -227,7 +293,7 @@
     "text": "Tile Providers\n\navailable_providers\navailable_providers()\nReturns a list of available tile providers as name =&gt; provider pairs.\nAvailable Providers:\n\nOpenStreetMap\nEsri WorldImagery\nEsri WorldTopoMap\nEsri WorldStreetMap\nCartoDB Positron\nCartoDB DarkMatter\n\nExample:\nproviders = available_providers()\napp = explore(provider=providers[2].second)  # Esri WorldImagery\n\n\n\nset_provider!\nset_provider!(app::GeoExplorerApp, provider)\nNote: Changing tile provider at runtime is not currently supported by Tyler.jl. Use explore(provider=...) to specify the provider at creation time.",
     "crumbs": [
       "API",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>API Reference</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>API Reference</span>"
     ]
   },
   {
@@ -238,7 +304,7 @@
     "text": "Layer Functions\n\nadd_layer!\nadd_layer!(app::GeoExplorerApp, name::String, plot; visible=true)\nAdd a plot as a named layer.\nArguments:\n\napp: The GeoExplorerApp instance\nname: Display name for the layer\nplot: A Makie plot object (from scatter!, lines!, poly!, etc.)\nvisible: Initial visibility (default: true)\n\nReturns: Layer instance\nExample:\nplt = scatter!(app.map_axis, xs, ys; color=:red)\nadd_layer!(app, \"My Points\", plt)\n\n\n\nremove_layer!\nremove_layer!(app::GeoExplorerApp, layer::Layer)\nremove_layer!(app::GeoExplorerApp, name::String)\nRemove a layer from the application.\n\n\n\ntoggle_layer!\ntoggle_layer!(layer::Layer)\ntoggle_layer!(app::GeoExplorerApp, name::String)\nToggle the visibility of a layer.\n\n\n\nget_layer\nget_layer(app::GeoExplorerApp, name::String)\nGet a layer by name. Returns nothing if not found.\n\n\n\nzoom_to_layer!\nzoom_to_layer!(app::GeoExplorerApp, layer::Layer; padding=0.1)\nzoom_to_layer!(app::GeoExplorerApp, name::String; padding=0.1)\nZoom the map to fit the extent of a layer.\nArguments:\n\npadding: Fractional padding around the layer extent (default: 0.1)",
     "crumbs": [
       "API",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>API Reference</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>API Reference</span>"
     ]
   },
   {
@@ -249,7 +315,7 @@
     "text": "Types\n\nGeoExplorerApp\nMain application struct containing:\n\nfigure::Figure - The GLMakie figure\nmap_axis::Axis - The map axis\nmap::Tyler.Map - The Tyler map object\nzoom_level::Observable{Int} - Current zoom level\nprovider - Current tile provider\nextent::Extents.Extent - Original extent\ncursor_pos::Observable{Tuple{Float64, Float64}} - Cursor position (lon, lat)\nlayers::Vector{Layer} - Registered layers\n\n\n\n\nLayer\nA layer that can be plotted on top of the base map.\n\nname::String - Display name for the layer\nplot::Any - Reference to the Makie plot object\nvisible::Observable{Bool} - Whether the layer is currently visible",
     "crumbs": [
       "API",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>API Reference</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>API Reference</span>"
     ]
   },
   {
@@ -260,7 +326,7 @@
     "text": "Coordinate Conversion\nGeoExplorer uses Web Mercator (EPSG:3857) internally but accepts WGS84 (EPSG:4326) coordinates for navigation functions.\nThe cursor position display shows WGS84 coordinates (latitude/longitude in degrees).",
     "crumbs": [
       "API",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>API Reference</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>API Reference</span>"
     ]
   },
   {
@@ -271,7 +337,7 @@
     "text": "fatal: invalid object name 'origin/benchmark-results'.\n*No benchmark results available yet.*\n\nRun benchmarks locally and push results to the `benchmark-results` branch:\n\n```bash\njulia --project=benchmark benchmark/run.jl\nbash benchmark/push_results.sh\n```",
     "crumbs": [
       "Resources",
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Benchmarks</span>"
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Benchmarks</span>"
     ]
   },
   {
@@ -282,7 +348,7 @@
     "text": "Unreleased",
     "crumbs": [
       "Resources",
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Changelog</span>"
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Changelog</span>"
     ]
   }
 ]
