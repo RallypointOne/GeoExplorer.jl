@@ -1,0 +1,5 @@
+name: Dependabot auto-merge
+on: pull_request
+jobs:
+  auto-merge:
+    uses: RallypointOne/.github/.github/workflows/dependabot-automerge.yml@main
